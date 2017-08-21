@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_gray_lighter" >
+
+    <include
+        android:id="@+id/include_head"
+        layout="@layout/include_head" />
+
+    <TextView
+        android:id="@+id/delete_account_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/shadow_width"
+        android:text="@string/delete_account"
+        android:textSize="@dimen/font_tips_size"
+        android:background="@color/color_white"
+         />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/gainsboro" />
+
+</LinearLayout>

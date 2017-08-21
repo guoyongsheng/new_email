@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/commom_no_mail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="@dimen/image_scroll_to_top_size"
+        android:layout_height="@dimen/image_scroll_to_top_size"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_icon_no_mail" />
+
+    <TextView
+        android:id="@+id/commom_no_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_mail"
+        android:textColor="@color/color_gray"
+        android:textSize="@dimen/font_small" />
+
+</LinearLayout>

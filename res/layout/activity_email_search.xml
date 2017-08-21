@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/include_head"
+        layout="@layout/include_head" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/head_height_common"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/email_check_edit_margin_left_right"
+            android:layout_marginRight="@dimen/email_check_edit_margin_left_right"
+            android:layout_weight="1"
+            android:background="@drawable/drawable_search"
+            android:gravity="center_vertical"
+            android:padding="10dp" >
+
+            <ImageView
+                android:id="@+id/email_search_icon"
+                android:layout_width="@dimen/common_icon_bottom_size"
+                android:layout_height="@dimen/common_icon_bottom_size"
+                android:layout_marginRight="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@drawable/account_search" />
+
+            <ImageView
+                android:id="@+id/email_clear_icon"
+                android:layout_width="@dimen/common_icon_bottom_size"
+                android:layout_height="@dimen/common_icon_bottom_size"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_marginRight="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@drawable/search_delete"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/et_search_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/email_clear_icon"
+                android:layout_toRightOf="@id/email_search_icon"
+                android:background="@null"
+                android:hint="@string/search"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/email_search_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="@string/cancle"
+            android:textSize="@dimen/font_small"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/gainsboro" />
+
+    <include
+        android:id="@+id/include_content"
+        layout="@layout/include_content" />
+
+</LinearLayout>

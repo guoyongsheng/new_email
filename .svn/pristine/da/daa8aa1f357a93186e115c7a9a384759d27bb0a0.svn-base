@@ -1,0 +1,73 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="head_height_common">48dp</dimen>
+    <dimen name="height_search">32dp</dimen>
+    <dimen name="email_type_padding_top_bottom">16dp</dimen>
+    <dimen name="view_height">1dp</dimen>
+    <dimen name="email_list_margin_left_naviga">56dp</dimen>
+    <dimen name="email_check_edit_height">50dp</dimen>
+    <dimen name="email_check_edit_margin_left_right">15dp</dimen>
+    <dimen name="email_check_edit_padding">7dp</dimen>
+    <dimen name="email_check_edit_margin_top">20dp</dimen>
+    <dimen name="email_check_edit_margin">10dp</dimen>
+    <dimen name="item_email_list_margin">8dp</dimen>
+    <dimen name="item_email_list_icon_size">50dp</dimen>
+    <dimen name="no_read_size">6dp</dimen>
+    <dimen name="bottom_sheet_height">49dp</dimen>
+    <dimen name="item_email_detail_image_icon_size">25dp</dimen>
+    <dimen name="image_scroll_to_top_size">56dp</dimen>
+    <dimen name="view_divider_height">24dp</dimen>
+
+    <!-- font -->
+    <dimen name="font_big">20sp</dimen>
+    <dimen name="font_common">17sp</dimen>
+    <dimen name="font_small">13sp</dimen>
+    <dimen name="font_smaller">10sp</dimen>
+
+    <!-- radius -->
+    <dimen name="radius_big">6dp</dimen>
+    <dimen name="common_icon_size">24dp</dimen>
+    <dimen name="common_icon_padding">10dp</dimen>
+    <dimen name="common_icon_bottom_size">16dp</dimen>
+
+    <!-- slideMenu -->
+    <dimen name="list_padding">10dp</dimen>
+    <dimen name="shadow_width">15dp</dimen>
+    <dimen name="font_title_size">20sp</dimen>
+    <dimen name="font_tips_size">16sp</dimen>
+    <dimen name="font_content_size">17sp</dimen>
+    <dimen name="font_content_size1">19sp</dimen>
+    <dimen name="font_item_size">15sp</dimen>
+    <dimen name="font_editext_size">14sp</dimen>
+    <dimen name="font_item_other">13sp</dimen>
+    <dimen name="slidingmenu_offset">64dp</dimen>
+    <dimen name="font_rightmenu">20sp</dimen>
+    <dimen name="font_rightmenu_tips">19sp</dimen>
+    <dimen name="margin_bottom_rl_gv_app_center">10dp</dimen>
+    <dimen name="margin_bottom_gv_app_center">5dp</dimen>
+    <dimen name="margin_bottom_top_logo">10dp</dimen>
+    <dimen name="margin_top_top_logo">20dp</dimen>
+    <dimen name="padding_bt_jw_setting">5dp</dimen>
+    <dimen name="action_button_size">66dp</dimen>
+    <dimen name="action_button_content_margin">1dp</dimen>
+    <dimen name="action_button_margin">16dp</dimen>
+    <dimen name="action_menu_radius">96dp</dimen>
+    <dimen name="sub_action_button_size">52dp</dimen>
+    <dimen name="sub_action_button_content_margin">6dp</dimen>
+
+    <!-- progressbar -->
+    <dimen name="progress_bar_height">10dp</dimen>
+    <dimen name="progress_bar_width">220dp</dimen>
+    <dimen name="min_height_edit_email_content">100dp</dimen>
+    <dimen name="attachment_name_margin_right">64dp</dimen>
+    <dimen name="select_inner_contact_name_margin_image">4dp</dimen>
+    <dimen name="select_inner_contact_name_margin_image_root_note">10dp</dimen>
+    <dimen name="select_inner_contact_icon_size">40dp</dimen>
+    
+    <dimen name="inner_contacts_search_height">32dp</dimen>
+    <dimen name="inner_contacts_search_width">28dp</dimen>
+
+</resources>

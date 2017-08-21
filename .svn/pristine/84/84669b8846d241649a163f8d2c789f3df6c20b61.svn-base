@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:background="@drawable/drawable_email_detail_attachment_background"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/email_check_edit_padding"
+        android:paddingTop="@dimen/email_check_edit_padding" >
+
+        <ImageView
+            android:id="@+id/item_email_detail_attachment_icon"
+            android:layout_width="@dimen/item_email_detail_image_icon_size"
+            android:layout_height="@dimen/item_email_detail_image_icon_size"
+            android:layout_marginLeft="@dimen/item_email_list_margin"
+            android:contentDescription="@string/app_name"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/item_email_detail_attachment_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/email_check_edit_padding"
+            android:layout_marginRight="@dimen/attachment_name_margin_right"
+            android:layout_toRightOf="@id/item_email_detail_attachment_icon"
+            android:singleLine="true"
+            android:textSize="@dimen/font_smaller" />
+
+        <TextView
+            android:id="@+id/item_email_detail_attachment_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/item_email_detail_attachment_name"
+            android:layout_below="@id/item_email_detail_attachment_name"
+            android:layout_marginTop="@dimen/email_check_edit_padding"
+            android:singleLine="true"
+            android:textSize="@dimen/font_smaller" />
+
+        <TextView
+            android:id="@+id/item_eamil_detail_attachment_open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/item_email_list_margin"
+            android:background="@drawable/drawable_email_detail_attachment_background"
+            android:paddingBottom="@dimen/email_check_edit_padding"
+            android:paddingLeft="@dimen/item_email_list_margin"
+            android:paddingRight="@dimen/item_email_list_margin"
+            android:paddingTop="@dimen/email_check_edit_padding"
+            android:text="@string/open"
+            android:textSize="@dimen/font_small" />
+    </RelativeLayout>
+
+</RelativeLayout>

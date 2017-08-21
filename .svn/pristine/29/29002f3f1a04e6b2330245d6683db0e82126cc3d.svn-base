@@ -1,0 +1,73 @@
+/**
+ * @date2016-10-19
+   @userAdministrator
+   
+ */
+package com.zfsoft.zf_new_email.modules.emaildetail;
+
+import com.zfsoft.zf_new_email.listener.CallBackListener;
+
+/**
+ * @author wesley
+ * @date 2016-10-19下午7:42:36
+ * @Description: presenter
+ */
+public class EmailDetailPresenter implements EmailDetailContract.Presenter {
+
+	private EmailDetailContract.View view;
+	private EmailDetailServiceImpl impl;
+
+	public EmailDetailPresenter(EmailDetailContract.View view) {
+		this.view = view;
+		view.setPresenter(this);
+		this.impl = new EmailDetailServiceImpl();
+	}
+
+	@Override
+	public void updateMailStatus(String messageId, int messageNumber, final int status, int type, final int position) {
+
+		impl.updateMailStatus(messageId, messageNumber, status, type, position, new CallBackListener<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean data) {
+
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+				if (!view.isActive()) {
+					return;
+				}
+				view.updateEmailStatus(status, position);
+				view.showDeteleError(errorMessage);
+			}
+		});
+	}
+
+	@Override
+	public void markOrUnMarkMail(String messageId, int messageNumber, final int status, int type, final int position) {
+
+		impl.markOrUnMarkMail(messageId, messageNumber, status, type, position, new CallBackListener<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean data) {
+
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+				if (!view.isActive()) {
+					return;
+				}
+
+				view.markMailSuccess(status, position);
+				view.showDeteleError(errorMessage);
+			}
+		});
+	}
+
+	@Override
+	public void cancelRequest() {
+
+	}
+}

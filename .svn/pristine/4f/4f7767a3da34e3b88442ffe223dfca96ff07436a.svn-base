@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/email_check_edit_margin"
+            android:paddingTop="@dimen/email_check_edit_margin" >
+
+            <TextView
+                android:id="@+id/email_send_or_reply_getters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:text="@string/email_getter"
+                android:textColor="@color/color_gray"
+                android:textSize="@dimen/font_small" />
+
+            <com.zfsoft.zf_new_email.widget.tagseditText.TagsEditText
+                xmlns:TagsEditText="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/email_send_or_reply_getter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/email_send_or_reply_getters"
+                android:layout_marginRight="@dimen/item_email_list_icon_size"
+                android:layout_toRightOf="@id/email_send_or_reply_getters"
+                TagsEditText:allowSpaceInTag="true"
+                TagsEditText:tagsBackground="@drawable/oval"
+                TagsEditText:tagsCloseImageRight="@drawable/tag_close"
+                android:background="@null"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/email_send_or_reply_add_getter"
+                android:layout_width="@dimen/common_icon_bottom_size"
+                android:layout_height="@dimen/common_icon_bottom_size"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/image_icon_add_email" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:background="@color/color_gray" />
+
+        <RelativeLayout
+            android:id="@+id/email_send_relative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/email_check_edit_margin"
+            android:paddingTop="@dimen/email_check_edit_margin" >
+
+            <TextView
+                android:id="@+id/email_send_or_reply_chao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:text="@string/email_sender"
+                android:textColor="@color/color_gray"
+                android:textSize="@dimen/font_small" />
+
+            <TextView
+                android:id="@+id/email_send_or_reply_chao_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/email_send_or_reply_chao"
+                android:layout_marginRight="@dimen/item_email_list_icon_size"
+                android:layout_toRightOf="@id/email_send_or_reply_chao"
+                android:singleLine="true"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/email_send_or_reply_add_chao"
+                android:layout_width="@dimen/common_icon_bottom_size"
+                android:layout_height="@dimen/common_icon_bottom_size"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/image_icon_add_email"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:background="@color/color_gray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/email_check_edit_margin"
+            android:paddingTop="@dimen/email_check_edit_margin" >
+
+            <TextView
+                android:id="@+id/email_send_or_reply_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:text="@string/email_subject"
+                android:textColor="@color/color_gray"
+                android:textSize="@dimen/font_small" />
+
+            <EditText
+                android:id="@+id/send_or_reply_mail_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/email_send_or_reply_sub"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_toRightOf="@id/email_send_or_reply_sub"
+                android:background="@null"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/email_no_attachment_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:background="@color/color_gray"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/email_send_or_reply_attachments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/item_email_list_margin"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/email_check_edit_margin"
+                android:paddingTop="@dimen/email_check_edit_margin" >
+
+                <ImageView
+                    android:id="@+id/email_send_or_reply_attachment_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_vertical_margin"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/item_mail_list_attachment" />
+
+                <TextView
+                    android:id="@+id/email_send_or_reply_attachment_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/email_check_edit_padding"
+                    android:layout_toRightOf="@id/email_send_or_reply_attachment_icon"
+                    android:textSize="@dimen/font_smaller" />
+
+                <TextView
+                    android:id="@+id/email_send_or_reply_attachment_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/email_check_edit_padding"
+                    android:layout_toRightOf="@id/email_send_or_reply_attachment_number"
+                    android:textSize="@dimen/font_smaller" />
+
+                <ImageView
+                    android:id="@+id/email_send_or_reply_attachment_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/activity_vertical_margin"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/item_mail_list_attachment"
+                    android:tag="0" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/email_detail_views"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_height"
+                android:background="@color/color_gray" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/email_send_or_reply_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/color_white"
+            android:dividerHeight="@dimen/item_email_list_margin"
+            android:scrollbars="none"
+            android:visibility="gone" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/email_send_or_reply_other_attachment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/email_check_edit_margin"
+            android:paddingLeft="@dimen/activity_vertical_margin"
+            android:paddingTop="@dimen/email_check_edit_margin"
+            android:textColor="@color/color_bule"
+            android:textSize="@dimen/font_smaller"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/email_send_or_reply_view_attachment"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:layout_marginBottom="@dimen/item_email_list_margin"
+            android:layout_marginTop="@dimen/item_email_list_margin"
+            android:background="@color/color_gray"
+            android:visibility="visible" />
+
+        <EditText
+            android:id="@+id/send_or_reply_mail_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="top|left"
+            android:hint="@string/input_email_content"
+           	android:minHeight="@dimen/min_height_edit_email_content"
+            android:paddingLeft="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_vertical_margin"
+            android:textSize="@dimen/font_small" />
+
+        <TextView
+            android:id="@+id/send_or_reply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/item_email_list_margin"
+            android:layout_marginRight="@dimen/item_email_list_margin"
+            android:layout_marginTop="@dimen/item_email_list_margin"
+            android:background="@color/color_deepgray"
+            android:paddingLeft="@dimen/item_email_list_margin"
+            android:paddingRight="@dimen/item_email_list_margin"
+            android:textSize="@dimen/font_small"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</ScrollView>

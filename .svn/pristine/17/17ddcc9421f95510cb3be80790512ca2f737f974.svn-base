@@ -1,0 +1,276 @@
+/**
+ * @date2016-10-17
+   @userAdministrator
+   
+ */
+package com.zfsoft.zf_new_email.modules.emaillist;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zfsoft.zf_new_email.base.BasePresenter;
+import com.zfsoft.zf_new_email.base.BaseView;
+import com.zfsoft.zf_new_email.entity.Email;
+
+/**
+ * @author wesley
+ * @date 2016-10-17下午3:46:50
+ * @Description: 邮件列表协议接口
+ */
+public interface EmailListContract {
+
+	interface View extends BaseView<EmailListPresenter> {
+
+		/**
+		 * 根据邮件类型来获取数据
+		 * 
+		 * @param emailType
+		 *            邮件类型
+		 * @param startPosition
+		 *            开始位置
+		 * 
+		 * @param isRefreshing
+		 *            true:下拉刷新 false:滚动加载
+		 */
+		void loadData(int emailType, int startPosition, boolean isRefreshing);
+
+		/**
+		 * 显示邮件数据
+		 * 
+		 * @param list
+		 *            邮件集合
+		 */
+		void showData(ArrayList<Email> list);
+
+		/**
+		 * 显示错误的信息
+		 * 
+		 * @param errorMessage
+		 *            错误信息
+		 */
+		void showErrorMessage(String errorMessage);
+
+		/**
+		 * 显示正确的信息
+		 * 
+		 * @param message
+		 *            正确的信息
+		 */
+		void showSuccessMessage(String message);
+
+		/**
+		 * 跟新数据
+		 * 
+		 * @param position
+		 *            在列表中的位置
+		 */
+		void updateData(int position);
+
+		/**
+		 * 改变邮件状态 把未读邮件置为已读
+		 * 
+		 * @param messageNumber
+		 *            邮件number
+		 * @param isNews
+		 *            是否未读
+		 * @param position
+		 *            item在列表中的位置
+		 * 
+		 * @param email
+		 *            要跟新的邮件
+		 */
+		void updateMailStatus(String messageId, int messageNumber, boolean isNews, int position, Email email);
+
+		/**
+		 * 改变邮件的状态
+		 * 
+		 * @param position
+		 *            item在列表中的位置
+		 * @param status
+		 *            0:已读 1:未读
+		 * 
+		 * @param type
+		 *            类型
+		 * @param email
+		 *            要跟新的邮件
+		 */
+		void updateMailStatus(int position, int status, int type, Email email);
+
+		/**
+		 * 同时改变多个邮件的状态
+		 * 
+		 * @param list
+		 *            邮件集合
+		 * @param status
+		 *            0:已读 1:未读
+		 * 
+		 * @param listEmail
+		 *            选中的多个邮件
+		 */
+		void updateMailGroupStatus(List<Integer> list, int status, List<Email> listEmail);
+
+		/**
+		 * 删除多个邮件后刷新界面
+		 */
+		void refresh();
+
+		/**
+		 * @param msg
+		 *            对话框的信息
+		 */
+		void showProgress(String msg);
+
+		/**
+		 * 隱藏對話框
+		 */
+		void hideProgress();
+
+		/**
+		 * 显示没有邮件时的布局
+		 */
+		void showEmptyView();
+
+		/**
+		 * 标记或者取消标记成功
+		 * 
+		 * @param status
+		 *            0:取消标记 1:添加标记
+		 * @param position
+		 *            在列表中的位置
+		 * 
+		 * @param email
+		 */
+		void markSuccess(int status, int position, Email email);
+
+		/**
+		 * 邮件删除失败
+		 * 
+		 * @param position
+		 *            在列表中的位置
+		 * 
+		 * @param email
+		 *            邮件
+		 */
+		void deleteFailure(int position, Email email);
+
+		/**
+		 * 同时添加多个星标
+		 * 
+		 * @param list
+		 *            邮件集合
+		 * @param status
+		 *            0:取消星标 1：添加星标
+		 * 
+		 * @param listEmail
+		 *            email list
+		 */
+		void markMailGroupStatus(List<Integer> list, int status, List<Email> listEmail);
+	}
+
+	interface Presenter extends BasePresenter {
+
+		/**
+		 * 根据邮件类型来获取数据
+		 * 
+		 * @param emailType
+		 *            邮件类型
+		 * @param startPosition
+		 *            开始位置
+		 * 
+		 * @param isRefreshing
+		 *            是否是刷新
+		 */
+		void loadData(int emailType, int startPosition, int type, boolean isRefreshing);
+
+		/**
+		 * 删除邮件
+		 * 
+		 * @param emailType
+		 *            邮件类型
+		 * @param messageId
+		 *            邮件id
+		 * @param position
+		 *            邮件在列表中的位置
+		 * 
+		 * @param type
+		 *            类型
+		 * 
+		 * @param email
+		 *            要刪除的邮件
+		 */
+		void deleteMailByMessageId(String id, int emailType, String messageId, int position, int type, Email email);
+
+		/**
+		 * 删除多个邮件
+		 * 
+		 * @param emailType
+		 *            邮件类型
+		 * @param list
+		 *            邮件messageNumber集合
+		 * @param type
+		 *            类型
+		 */
+		void deleteMailGroundByMessageId(int emailType, ArrayList<Email> list, int type);
+
+		/**
+		 * 把未读邮件置为已读
+		 * 
+		 * @param messageNumber
+		 *            邮件number
+		 * @param status
+		 *            0:标记已读 1:标记未读
+		 * 
+		 * @param type
+		 *            0:收件箱 1:未读邮件 3:已发送 4:已删除
+		 * 
+		 * @param position
+		 *            在列表中的位置
+		 * 
+		 * @param email
+		 *            要跟新的邮件
+		 */
+		void updateMailStatus(String messageId, int messageNumber, int status, int type, int position, Email email);
+
+		/**
+		 * 改变邮件的状态
+		 * 
+		 * @param list
+		 *            邮件集合
+		 * @param status
+		 *            0:标记已读 1:标记未读
+		 * @param type
+		 *            0:收件箱 1:未读邮件 3:已发送 4:已删除
+		 */
+		void updateMailGroupStatus(List<Email> list, int status, int type);
+
+		/**
+		 * 添加星标或者取消添加星标
+		 * 
+		 * @param messageNumber
+		 *            邮件number
+		 * @param status
+		 *            0: 取消星标 1:添加星标
+		 * @param type
+		 *            0:收件箱 1:未读邮件 3:已发送 4:已删除
+		 * @param position
+		 *            在列表中的位置
+		 * 
+		 * @param email
+		 *            email to remark
+		 */
+		void markOrUnMarkMail(String messageId, int messageNumber, int status, int type, int position, Email email);
+
+		/**
+		 * 添加星标或者取消星标
+		 * 
+		 * @param list
+		 *            邮件集合
+		 * @param status
+		 *            0: 取消星标 1:添加星标
+		 * @param type
+		 *            0:收件箱 1:未读邮件 3:已发送 4:已删除
+		 */
+		void markOrUnmardMailGroup(List<Email> list, int status, int type);
+
+	}
+}

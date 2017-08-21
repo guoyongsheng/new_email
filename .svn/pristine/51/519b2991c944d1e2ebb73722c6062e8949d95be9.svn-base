@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/email_search_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:listSelector="@drawable/list_item_selector"
+            android:visibility="gone" >
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/email_search_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <RadioGroup
+            android:id="@+id/emal_search_group"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/email_search_sender"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/sender"
+                android:textColor="@color/radio_button_selector"
+                android:textSize="@dimen/font_small" />
+
+            <View
+                android:layout_width="@dimen/view_height"
+                android:layout_height="@dimen/email_check_edit_margin_left_right"
+                android:layout_gravity="center_vertical"
+                android:background="@color/gainsboro" />
+
+            <RadioButton
+                android:id="@+id/email_search_getter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/getter"
+                android:textColor="@color/radio_button_selector"
+                android:textSize="@dimen/font_small" />
+
+            <View
+                android:id="@+id/email_search_getter_line"
+                android:layout_width="@dimen/view_height"
+                android:layout_height="@dimen/email_check_edit_margin_left_right"
+                android:layout_gravity="center_vertical"
+                android:background="@color/gainsboro" />
+
+            <RadioButton
+                android:id="@+id/email_search_subject"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/subject"
+                android:textColor="@color/radio_button_selector"
+                android:textSize="@dimen/font_small" />
+
+            <View
+                android:id="@+id/email_search_subject_line"
+                android:layout_width="@dimen/view_height"
+                android:layout_height="@dimen/email_check_edit_margin_left_right"
+                android:layout_gravity="center_vertical"
+                android:background="@color/gainsboro" />
+
+            <RadioButton
+                android:id="@+id/email_search_all"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/all"
+                android:textColor="@color/radio_button_selector"
+                android:textSize="@dimen/font_small" />
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/gainsboro" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/fragment_email_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/gainsboro"
+            android:dividerHeight="@dimen/view_height"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/commom_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/common_empty_view"
+        android:visibility="gone" />
+
+</LinearLayout>

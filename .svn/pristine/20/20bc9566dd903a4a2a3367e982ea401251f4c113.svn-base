@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F1F1F1" >
+
+    <EditText
+        android:id="@+id/fragment_check_email_user"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/email_check_edit_height"
+        android:layout_marginLeft="@dimen/email_check_edit_margin_left_right"
+        android:layout_marginRight="@dimen/email_check_edit_margin_left_right"
+        android:layout_marginTop="@dimen/email_check_edit_margin_top"
+        android:background="@drawable/drawable_email_check_edit_background"
+        android:inputType="textEmailAddress"
+        android:hint="@string/user_address"
+        android:paddingLeft="@dimen/email_check_edit_padding"
+        android:singleLine="true"
+        android:textColorHint="@color/color_gray"
+        android:textSize="@dimen/font_common" />
+
+    <EditText
+        android:id="@+id/fragment_check_emails_pass"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/email_check_edit_height"
+        android:layout_marginLeft="@dimen/email_check_edit_margin_left_right"
+        android:layout_marginRight="@dimen/email_check_edit_margin_left_right"
+        android:layout_marginTop="@dimen/email_check_edit_margin_top"
+        android:background="@drawable/drawable_email_check_edit_background"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:paddingLeft="@dimen/email_check_edit_padding"
+        android:singleLine="true"
+        android:textColorHint="@color/color_gray"
+        android:textSize="@dimen/font_small" />
+
+    <!--
+         <Button
+        android:id="@+id/fragment_check_email_done"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/email_check_edit_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/email_check_edit_margin_left_right"
+        android:layout_marginRight="@dimen/email_check_edit_margin_left_right"
+        android:layout_marginTop="@dimen/email_check_edit_margin_left_right"
+        android:background="@drawable/drawable_email_check_edit_background"
+        android:gravity="center"
+        android:text="@string/done"
+        android:textColor="@color/color_gray"
+        android:textSize="@dimen/font_small" />
+    -->
+
+    <Button
+        android:id="@+id/fragment_check_email_done"
+        style="@style/style_loginText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/nlshape"
+        android:padding="10dp"
+        android:text="@string/str_btn_Login"
+        android:textColor="@color/color_white" />
+
+</LinearLayout>

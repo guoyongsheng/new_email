@@ -1,0 +1,79 @@
+/**
+ * 
+ */
+package com.zfsoft.zf_new_email.modules.selectinnercontracts;
+
+import java.util.List;
+import com.zfsoft.zf_new_email.R;
+import com.zfsoft.zf_new_email.entity.ContractsInfo;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
+/**
+ * @author wesley
+ * @date: 2017-2-9
+ * @Description: 联系人适配器
+ */
+public class SelectInnerContactAdapter extends BaseAdapter {
+
+	private LayoutInflater inflater;
+	private List<ContractsInfo> list;
+
+	public SelectInnerContactAdapter(Context context) {
+		if (context != null) {
+			inflater = LayoutInflater.from(context);
+		}
+	}
+
+	public void notifyDataSetChanged(List<ContractsInfo> list) {
+		this.list = list;
+		notifyDataSetChanged();
+	}
+
+	@Override
+	public int getCount() {
+		if (list != null) {
+			return list.size();
+		}
+		return 0;
+	}
+
+	@Override
+	public Object getItem(int position) {
+		if (list != null && list.size() > position) {
+			return list.get(position);
+		}
+		return null;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+
+		if (inflater == null || list == null || list.size() <= position) {
+			return null;
+		}
+
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			viewHolder = new ViewHolder();
+			convertView = inflater.inflate(R.layout.item_select_inner_contact, null);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		return convertView;
+	}
+
+	// 静态内部类
+	private static final class ViewHolder {
+
+	}
+}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/popup_mark_or_not"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/head_height_common"
+        android:gravity="center"
+        android:tag="0"
+        android:textSize="@dimen/font_small" />
+
+    <View
+        android:id="@+id/popup_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/color_gray" />
+
+    <TextView
+        android:id="@+id/popup_star"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/head_height_common"
+        android:gravity="center"
+        android:text="@string/mark_star"
+        android:textSize="@dimen/font_small" />
+
+    <LinearLayout
+        android:id="@+id/popup_un_mark_star"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_gray" />
+
+        <TextView
+            android:id="@+id/reply_with_attachment"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:gravity="center"
+            android:text="@string/mark_un_star"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/reply_all_with_attachment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:gravity="center"
+            android:text="@string/reply_all_with_attachment"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/forward_with_attachment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:gravity="center"
+            android:text="@string/forward_with_attachment"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
+
+</LinearLayout>

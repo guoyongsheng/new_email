@@ -1,0 +1,59 @@
+/**
+ * 
+ */
+package com.zfsoft.zf_new_email.modules.checkemail;
+
+import android.os.AsyncTask;
+import com.zfsoft.zf_new_email.constant.Constant;
+import com.zfsoft.zf_new_email.listener.CallBackListener;
+import com.zfsoft.zf_new_email.util.MailHelper;
+
+/**
+ * @author wesley
+ * @date: 2016-12-14
+ * @Description: 接口实现
+ */
+public class CheckEmailServiceImpl extends ICheckEmailService {
+
+	@Override
+	public void login(String emailAddress, String password, String login_from, CallBackListener<Boolean> listener) {
+
+		AsyncLogin login = new AsyncLogin(listener);
+		add(login);
+		login.execute(emailAddress, password, login_from);
+	}
+
+	// 静态内部类---实现登录
+	private class AsyncLogin extends AsyncTask<String, Void, Boolean> {
+
+		private CallBackListener<Boolean> listener;
+
+		public AsyncLogin(CallBackListener<Boolean> listener) {
+			this.listener = listener;
+		}
+
+		@Override
+		protected Boolean doInBackground(String... params) {
+
+			if (isCancelled()) {
+				return false;
+			}
+			return MailHelper.getInstance().login(params[0], params[1], params[2]);
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				listener.onSuccess(result);
+			} else {
+				listener.onFailure(Constant.LOGIN_ERROR);
+			}
+		}
+
+		@Override
+		protected void onCancelled(Boolean result) {
+			super.onCancelled(result);
+		}
+	}
+}

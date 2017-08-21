@@ -1,0 +1,25 @@
+/**
+ * @date2016-10-17
+   @userAdministrator
+   
+ */
+package com.zfsoft.zf_new_email.modules.emailtype;
+
+import com.zfsoft.zf_new_email.base.BasePresenter;
+import com.zfsoft.zf_new_email.base.BaseView;
+
+/**
+ * @author wesley
+ * @date 2016-10-17下午1:56:56
+ * @Description: 协议接口
+ */
+public interface EmailTypeContract {
+
+	interface View extends BaseView<EmailTypePresenter> {
+
+	}
+
+	interface Presenter extends BasePresenter {
+
+	}
+}

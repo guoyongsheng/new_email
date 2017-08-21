@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/email_list_relative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/include_head"
+            layout="@layout/include_head" />
+
+        <include
+            android:id="@+id/include_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/include_head"
+            android:layout_marginBottom="@dimen/bottom_sheet_height"
+            layout="@layout/include_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_sheet_height"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_height"
+                android:background="@color/gainsboro" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:id="@+id/email_list_write_mail_linear"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/email_list_write_mail_icon"
+                        android:layout_width="@dimen/common_icon_bottom_size"
+                        android:layout_height="@dimen/common_icon_bottom_size"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image_icon_add_email" />
+
+                    <TextView
+                        android:id="@+id/email_list_write_mail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/write_mail"
+                        android:textSize="@dimen/font_small" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/email_list_search_linear"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/email_list_search_icon"
+                        android:layout_width="@dimen/common_icon_bottom_size"
+                        android:layout_height="@dimen/common_icon_bottom_size"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image_icon_search" />
+
+                    <TextView
+                        android:id="@+id/email_list_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/search"
+                        android:textSize="@dimen/font_small" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/email_list_menu_linear"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:tag="0" >
+
+                    <ImageView
+                        android:id="@+id/email_list_menu_icon"
+                        android:layout_width="@dimen/common_icon_bottom_size"
+                        android:layout_height="@dimen/common_icon_bottom_size"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/email_setting" />
+
+                    <TextView
+                        android:id="@+id/email_list_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/settings"
+                        android:textSize="@dimen/font_small" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/email_list_image_scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="@dimen/bottom_sheet_height"
+        android:contentDescription="@string/app_name"
+        android:padding="@dimen/email_type_padding_top_bottom"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_icon_top"
+        android:visibility="gone" />
+
+</FrameLayout>

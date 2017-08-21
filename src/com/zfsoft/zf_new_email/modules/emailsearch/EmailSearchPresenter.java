@@ -1,0 +1,200 @@
+/**
+ * 
+ */
+package com.zfsoft.zf_new_email.modules.emailsearch;
+
+import java.util.ArrayList;
+import java.util.List;
+import com.zfsoft.zf_new_email.constant.Constant;
+import com.zfsoft.zf_new_email.entity.Email;
+import com.zfsoft.zf_new_email.entity.HistoryInfo;
+import com.zfsoft.zf_new_email.listener.CallBackListener;
+import com.zfsoft.zf_new_email.modules.emaillist.EmailListDeleteOAImpl;
+import com.zfsoft.zf_new_email.modules.emaillist.EmailListServeceOAImpl;
+
+import android.text.TextUtils;
+
+/**
+ * @author wesley
+ * @date: 2016-11-22
+ * @Description: 业务逻辑
+ */
+public class EmailSearchPresenter implements EmailSearchContract.Presenter {
+
+	private EmailSearchContract.View view;
+	private EmailSearchServiceImpl impl;
+	private EmailListServeceOAImpl oaImpl;
+	private EmailListDeleteOAImpl deleteOA;
+
+	public EmailSearchPresenter(EmailSearchContract.View view) {
+		this.view = view;
+		view.setPresenter(this);
+		impl = new EmailSearchServiceImpl();
+		oaImpl = new EmailListServeceOAImpl();
+		deleteOA = new EmailListDeleteOAImpl();
+	}
+
+	@Override
+	public boolean checkSearchContentIsEmpty(String content) {
+		return TextUtils.isEmpty(content) ? true : false;
+	}
+
+	@Override
+	public void searchMail(int startPosition, int type, int status, String content, final boolean isRefreshing) {
+
+		if (checkSearchContentIsEmpty(content)) {
+			view.showErrorMessage(Constant.PLEASE_INPUT_SEARCH_CONTENT);
+			return;
+		}
+
+		impl.searchMail(startPosition, type, status, content, isRefreshing, new CallBackListener<List<Email>>() {
+
+			@Override
+			public void onSuccess(List<Email> data) {
+
+				if (!view.isActive()) {
+					return;
+				}
+				if ((data == null || data.size() == 0) && isRefreshing) {
+					view.showEmptyView();
+				} else {
+					view.onSuccess(data);
+				}
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+
+			}
+		});
+
+	}
+
+	@Override
+	public boolean checkHasSameHistory(List<HistoryInfo> list, String content) {
+		if (list == null) {
+			return false;
+		}
+		for (HistoryInfo historyInfo : list) {
+			String value = historyInfo.getContent();
+			if (value != null && value.equals(content)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public List<HistoryInfo> getHistoryList(List<HistoryInfo> list, String content) {
+		List<HistoryInfo> listHistoryInfos = new ArrayList<>();
+		HistoryInfo historyInfo = new HistoryInfo(content);
+		listHistoryInfos.add(historyInfo);
+		if (list == null || list.size() == 0) {
+			return listHistoryInfos;
+		}
+		if (checkHasSameHistory(list, content)) {
+			listHistoryInfos.addAll(getDealHistoryList(list, content));
+		} else {
+			listHistoryInfos.addAll(list);
+		}
+		if (listHistoryInfos.size() > 5) {
+			listHistoryInfos = listHistoryInfos.subList(0, 5);
+		}
+		return listHistoryInfos;
+	}
+
+	@Override
+	public List<HistoryInfo> getDealHistoryList(List<HistoryInfo> list, String content) {
+		if (list == null || list.size() == 0) {
+			return new ArrayList<>();
+		}
+
+		int size = list.size();
+		for (int i = 0; i < size; i++) {
+			String value = list.get(i).getContent();
+			if (value != null && value.equals(content)) {
+				list.remove(i);
+				break;
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public void deleteMailByMessageId(String messageId, int emailType, int messageNumber, final int position, final int type, final Email email, final int status, final String content, int startPosition) {
+
+		impl.deleteMialInSearch(messageId, emailType, messageNumber, position, type, email, status, content, startPosition, new CallBackListener<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean data) {
+				if (!view.isActive()) {
+					return;
+				}
+				view.searchMail(0, type, status, content, true);
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+				if (!view.isActive()) {
+					return;
+				}
+				view.showErrorMessage(errorMessage);
+				view.deleteFailure(position, email);
+			}
+		});
+	}
+
+	@Override
+	public void cancelRequest() {
+		impl.clear();
+	}
+
+	@Override
+	public void loadDataInOA(int type, int start, int size, String endpoint, String app_token, String cond, final boolean isRefreshing) {
+		oaImpl.loadDataInOA(type, start, size, endpoint, app_token, cond, new CallBackListener<ArrayList<Email>>() {
+
+			@Override
+			public void onSuccess(ArrayList<Email> data) {
+
+				if (!view.isActive()) {
+					return;
+				}
+				if ((data == null || data.size() == 0) && isRefreshing) {
+					view.showEmptyView();
+				} else {
+					view.showDataInOA(data);
+				}
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+				if (!view.isActive()) {
+					return;
+				}
+
+				view.showErrorMessage(errorMessage);
+			}
+		});
+	}
+
+	@Override
+	public void deleteMailInOA(String[] deleteItemId, String curEmailType, String url, String token, final int position, final Email email, final int deleteType) {
+
+		deleteOA.deleteMailInOA(deleteItemId, curEmailType, url, token, position, email, new CallBackListener<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean data) {
+
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+				if (!view.isActive()) {
+					return;
+				}
+				view.showErrorMessage(errorMessage);
+				view.deleteFailure(position, email);
+			}
+		});
+	}
+}

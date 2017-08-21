@@ -1,0 +1,170 @@
+/**
+ * @date2016-10-17
+   @userAdministrator
+   
+ */
+package com.zfsoft.zf_new_email.modules.checkemail;
+
+import java.util.ArrayList;
+
+import com.zfsoft.zf_new_email.base.BasePresenter;
+import com.zfsoft.zf_new_email.base.BaseView;
+import com.zfsoft.zf_new_email.entity.AccountInfo;
+
+/**
+ * @author wesley
+ * @date 2016-10-17下午7:28:53
+ * @Description: 校验邮件的契约类
+ */
+public interface CheckEmailContract {
+
+	interface View extends BaseView<CheckEmailPresenter> {
+
+		/**
+		 * 获取邮箱账号
+		 * 
+		 * @return 邮箱账号
+		 */
+		String getEmailAccount();
+
+		/**
+		 * 获取邮箱密码
+		 * 
+		 * @return 邮箱密码
+		 */
+		String getEmailPassword();
+
+		/**
+		 * 登录
+		 * 
+		 * @param emailAccount
+		 *            邮箱账号
+		 * @param emailPassword
+		 *            邮箱密码
+		 * 
+		 */
+		void login(String emailAccount, String emailPassword);
+
+		/**
+		 * 显示错误的信息
+		 * 
+		 * @param errorMessage
+		 *            错误信息
+		 */
+		void showErrorMessage(String errorMessage);
+
+		/**
+		 * 登录失败
+		 * 
+		 * @param errorMessage
+		 *            失败的信息
+		 */
+		void loginError(String errorMessage);
+
+		/**
+		 * 登录成功
+		 */
+		void loginSuccess();
+
+		/**
+		 * 显示ProgressDialog
+		 */
+		void showProgressDialog();
+
+		/**
+		 * 隐藏ProgressDialog
+		 */
+		void hideProgressDialog();
+
+		/**
+		 * 保存邮箱账号
+		 * 
+		 * @param account
+		 *            邮箱账号
+		 * @param emailPassword
+		 *            密碼
+		 * @param emailType
+		 *            账号类型
+		 */
+		void saveAccount(String account, String emailPassword, int emailType);
+
+		/**
+		 * 获取所有的邮箱账号
+		 * 
+		 * @return 邮箱账号
+		 */
+		ArrayList<AccountInfo> getAccount();
+
+		/**
+		 * 显示设置授权码对话框
+		 * 
+		 * @param url
+		 *            網址
+		 */
+		void showDialog(String url);
+
+		/**
+		 * 隱藏對話框
+		 */
+		void hideDialog();
+	}
+
+	interface Presenter extends BasePresenter {
+
+		/**
+		 * 校验邮箱账号是否为空
+		 * 
+		 * @param emailAccount
+		 *            邮箱账号
+		 * @return true: 为空 false：不为空
+		 */
+		boolean checkEmailAccountIsEmpty(String emailAccount);
+
+		/**
+		 * 校验邮箱账号是否合法
+		 * 
+		 * @param emailAccount
+		 *            邮箱账号
+		 * @param emailType
+		 *            邮箱类型
+		 * @return true：合法 false:不合法
+		 */
+		boolean checkEmailAccountIsOk(String emailAccount, int emailType);
+
+		/**
+		 * 校验邮箱密码是否为空
+		 * 
+		 * @param emailPassword
+		 *            邮箱密码
+		 * @return true:为空 false:不为空
+		 */
+		boolean checkEmailPassIsEmpty(String emailPassword);
+
+		/**
+		 * 登录
+		 * 
+		 * @param emailAccount
+		 *            邮箱账号
+		 * @param emailPassword
+		 *            邮箱密码
+		 * 
+		 * @param emailType
+		 *            邮箱类型
+		 * 
+		 */
+		void login(String emailAccount, String emailPassword, int emailType);
+
+		/**
+		 * 获取不重复的账号集合
+		 * 
+		 * @param list
+		 *            集合
+		 * @param listSharedPreference
+		 *            本地的账号
+		 * @param account
+		 *            账号
+		 * @return 不重复的账号集合
+		 */
+		ArrayList<AccountInfo> getNoSmaeAccountList(ArrayList<AccountInfo> list, ArrayList<AccountInfo> listSharedPreference, String account);
+	}
+}

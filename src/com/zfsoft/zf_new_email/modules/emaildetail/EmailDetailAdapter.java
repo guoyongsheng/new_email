@@ -1,0 +1,47 @@
+/**
+ * @date2016-10-19
+   @userAdministrator
+   
+ */
+package com.zfsoft.zf_new_email.modules.emaildetail;
+
+import java.util.List;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+
+/**
+ * @author wesley
+ * @date 2016-10-19下午7:36:11
+ * @Description: viewpager适配器
+ */
+public class EmailDetailAdapter extends FragmentStatePagerAdapter {
+
+	private List<EmailDetailFragment> list;
+
+	public EmailDetailAdapter(FragmentManager fm) {
+		super(fm);
+	}
+
+	public EmailDetailAdapter(FragmentManager fm, List<EmailDetailFragment> list) {
+		super(fm);
+		this.list = list;
+	}
+
+	@Override
+	public Fragment getItem(int position) {
+		if (list != null && list.size() > position) {
+			return list.get(position);
+		}
+		return null;
+	}
+
+	@Override
+	public int getCount() {
+		if (list != null) {
+			return list.size();
+		}
+		return 0;
+	}
+	 
+}

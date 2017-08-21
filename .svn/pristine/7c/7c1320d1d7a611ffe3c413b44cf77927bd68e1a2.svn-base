@@ -1,0 +1,381 @@
+/**
+ * 
+ */
+package com.zfsoft.zf_new_email.modules.emailsendorreply;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import android.text.TextUtils;
+import com.zfsoft.zf_new_email.constant.Constant;
+import com.zfsoft.zf_new_email.entity.Attachment;
+import com.zfsoft.zf_new_email.entity.ContractsInfo;
+import com.zfsoft.zf_new_email.listener.CallBackListener;
+
+/**
+ * @author wesley
+ * @date: 2016-10-24
+ * @Description: presenter层
+ */
+public class EmailSendOrReplyPresenter implements EmailSendOrReplyContract.Presenter {
+
+	private EmailSendOrReplyContract.View view;
+	private EmailSendOrReplyImpl impl;
+
+	public EmailSendOrReplyPresenter(EmailSendOrReplyContract.View view) {
+		this.view = view;
+		view.setPresenter(this);
+		impl = new EmailSendOrReplyImpl();
+	}
+
+	@Override
+	public void sendEmail(List<String> listReceiver, String senderName, String subject, List<Attachment> listAttachmenet, String content, final boolean isDraft) {
+
+		if (checkReceiveIsEmpty(listReceiver)) {
+			view.showErrorMessage(Constant.SELECT_RECEIVE_PLEASE);
+			return;
+		}
+
+		if (checkSubjectIsEmpty(subject)) {
+			view.showErrorMessage(Constant.SUBJECT_IS_NOT_EMPTY);
+			return;
+		}
+
+		String message;
+		if (isDraft) {
+			message = Constant.SAVING;
+		} else {
+			message = Constant.SENDING;
+		}
+		view.showProgressDialog(message);
+		impl.sendEmail(listReceiver, senderName, subject, listAttachmenet, content, isDraft, new CallBackListener<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean data) {
+				if (!view.isActive()) {
+					return;
+				}
+				view.hideProgressDialog();
+				String message;
+				if (isDraft) {
+					message = Constant.MAIL_SAVE_SUCCESS;
+				} else {
+					message = Constant.MAIL_SEND_SUCCESS;
+				}
+				view.showMessage(message);
+				view.saveReceives();
+				view.destroryView();
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+				if (!view.isActive()) {
+					return;
+				}
+				view.hideProgressDialog();
+				String errorMessages;
+				if (isDraft) {
+					errorMessages = Constant.MAIL_SAVE_FAILURE;
+				} else {
+					errorMessages = Constant.MAIL_SNED_FAILURE;
+				}
+				view.showErrorMessage(errorMessages);
+			}
+		});
+	}
+
+	@Override
+	public boolean checkReceiveIsEmpty(List<String> listReceiver) {
+		return (listReceiver == null || listReceiver.size() == 0) ? true : false;
+	}
+
+	@Override
+	public boolean checkSubjectIsEmpty(String subject) {
+		return TextUtils.isEmpty(subject);
+	}
+
+	@Override
+	public void replyEmail(String messageId, int messageNumber, String subject, String content, int type, final boolean isDraft, int inbox_type, ArrayList<String> list, List<Attachment> listAttachment) {
+		if (checkSubjectIsEmpty(subject)) {
+			view.showErrorMessage(Constant.SUBJECT_IS_NOT_EMPTY);
+			return;
+		}
+
+		if (checkReceiveIsEmpty(list)) {
+			view.showErrorMessage(Constant.SELECT_RECEIVE_MAIL);
+			return;
+		}
+
+		String message;
+		if (isDraft) {
+			message = Constant.SAVING;
+		} else {
+			message = Constant.REPLYING;
+		}
+		view.showProgressDialog(message);
+		impl.replyEmail(messageId, messageNumber, subject, content, type, isDraft, inbox_type, list, listAttachment, new CallBackListener<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean data) {
+				if (!view.isActive()) {
+					return;
+				}
+				String message = null;
+				if (isDraft) {
+					message = Constant.MAIL_SAVE_SUCCESS;
+				} else {
+					message = Constant.MAIL_REPLY_SUCCESS;
+				}
+				view.hideProgressDialog();
+				view.showMessage(message);
+				view.saveReceives();
+				view.destroryView();
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+				if (!view.isActive()) {
+					return;
+				}
+				view.hideProgressDialog();
+				view.showErrorMessage(errorMessage);
+			}
+		});
+	}
+
+	@Override
+	public void forwardEmail(String messageId, int messageNumber, String subject, String content, int type, final boolean isDraft, ArrayList<String> forwardTo, List<Attachment> listAttachment) {
+		if (checkSubjectIsEmpty(subject)) {
+			view.showErrorMessage(Constant.SUBJECT_IS_NOT_EMPTY);
+			return;
+		}
+
+		if (checkReceiveIsEmpty(forwardTo)) {
+			view.showErrorMessage(Constant.SELECT_RECEIVE_MAIL);
+			return;
+		}
+
+		String message;
+		if (isDraft) {
+			message = Constant.SAVING;
+		} else {
+			message = Constant.FORWARDING;
+		}
+		view.showProgressDialog(message);
+		impl.forwardEmail(messageId, messageNumber, subject, content, type, isDraft, forwardTo, listAttachment, new CallBackListener<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean data) {
+				if (!view.isActive()) {
+					return;
+				}
+				String message = null;
+				if (isDraft) {
+					message = Constant.MAIL_SAVE_SUCCESS;
+				} else {
+					message = Constant.MAIL_FORWARD_SUCCESS;
+				}
+				view.hideProgressDialog();
+				view.showMessage(message);
+				view.saveReceives();
+				view.destroryView();
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+				if (!view.isActive()) {
+					return;
+				}
+				view.hideProgressDialog();
+				view.showErrorMessage(errorMessage);
+			}
+		});
+	}
+
+	@Override
+	public boolean isShowDraftDialog(String receiver, List<String> listCC, String subject, List<Attachment> listAttachmenet, String conetnt) {
+
+		if (!checkSubjectIsEmpty(receiver) || !checkSubjectIsEmpty(subject) || !checkSubjectIsEmpty(conetnt) || !checkAttachmentIsEmpty(listAttachmenet)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean checkAttachmentIsEmpty(List<Attachment> listAttachmenet) {
+		return (listAttachmenet == null || listAttachmenet.size() == 0) ? true : false;
+	}
+
+	@Override
+	public String[] convertTagSpanToArray(Collection<String> tags) {
+		if (tags == null || tags.size() == 0) {
+			return null;
+		}
+
+		Iterator<String> iterator = tags.iterator();
+		while (iterator.hasNext()) {
+			String value = iterator.next();
+			return new String[] { value };
+		}
+		return null;
+	}
+
+	@Override
+	public ArrayList<ContractsInfo> stringToObject(String receivers) {
+		ArrayList<ContractsInfo> list = new ArrayList<>();
+		if (TextUtils.isEmpty(receivers)) {
+			return list;
+		}
+
+		String[] arr = receivers.split(" ");
+		if (arr != null) {
+			int size = arr.length;
+			for (int i = 0; i < size; i++) {
+				ContractsInfo contractsInfo = new ContractsInfo();
+				contractsInfo.setName(arr[i]);
+				contractsInfo.setEmailAddress(arr[i]);
+				contractsInfo.setSelected(false);
+				list.add(contractsInfo);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public ArrayList<String> stringToArrayList(String receivers) {
+		ArrayList<String> list = new ArrayList<>();
+		if (TextUtils.isEmpty(receivers)) {
+			return list;
+		}
+
+		String[] arr = receivers.split(" ");
+		if (arr != null) {
+			int size = arr.length;
+			for (int i = 0; i < size; i++) {
+				list.add(arr[i]);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public String[] listToArray(ArrayList<ContractsInfo> list) {
+		if (list == null) {
+			return null;
+		}
+
+		int size = list.size();
+		String[] arr = new String[size];
+		for (int i = 0; i < size; i++) {
+			arr[i] = list.get(i).getEmailAddress();
+		}
+		return arr;
+	}
+
+	@Override
+	public ArrayList<ContractsInfo> getNewList(ArrayList<ContractsInfo> listSharedPreference, ArrayList<ContractsInfo> lists) {
+
+		if (listSharedPreference == null || listSharedPreference.size() == 0) {
+			return lists;
+		}
+
+		if (lists == null || lists.size() == 0) {
+			return lists;
+		}
+		if (contractsListContainsInputContracts(listSharedPreference, lists)) {
+			return listSharedPreference;
+		} else if (contractsListNotContainsInputContracts(listSharedPreference, lists)) {
+			listSharedPreference.addAll(0, lists);
+			return listSharedPreference;
+		} else {
+			listSharedPreference.addAll(0, getNotContainsList(listSharedPreference, lists));
+			return listSharedPreference;
+		}
+	}
+
+	@Override
+	public boolean contractsListContainsInputContracts(ArrayList<ContractsInfo> list_selected, ArrayList<ContractsInfo> list_input) {
+
+		if (list_selected == null || list_selected.size() == 0) {
+			return false;
+		}
+
+		if (list_input == null || list_input.size() == 0) {
+			return true;
+		}
+
+		ArrayList<String> stringSelect = contractsListToStringList(list_selected);
+		ArrayList<String> stringInput = contractsListToStringList(list_input);
+		return stringSelect.containsAll(stringInput);
+	}
+
+	@Override
+	public boolean contractsListNotContainsInputContracts(ArrayList<ContractsInfo> list_selected, ArrayList<ContractsInfo> list_input) {
+		if (list_selected == null || list_selected.size() == 0) {
+			return true;
+		}
+
+		if (list_input == null || list_input.size() == 0) {
+			return true;
+		}
+
+		ArrayList<String> stringSelect = contractsListToStringList(list_selected);
+		ArrayList<String> stringInput = contractsListToStringList(list_input);
+		int sizeInput = stringInput.size();
+		for (int i = 0; i < sizeInput; i++) {
+			if (stringSelect.contains(stringInput.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public ArrayList<ContractsInfo> getNotContainsList(ArrayList<ContractsInfo> list_selected, ArrayList<ContractsInfo> list_input) {
+
+		ArrayList<ContractsInfo> list = new ArrayList<>();
+		if (list_selected == null || list_selected.size() == 0) {
+			return list;
+		}
+
+		if (list_input == null || list_input.size() == 0) {
+			return list;
+		}
+
+		ArrayList<ContractsInfo> listCommon = new ArrayList<>();
+		int size_selected = list_selected.size();
+		int size_input = list_input.size();
+		for (int i = 0; i < size_selected; i++) {
+			String value = list_selected.get(i).getEmailAddress();
+			for (int j = 0; j < size_input; j++) {
+				String address = list_input.get(j).getEmailAddress();
+				if (address != null && address.equals(value)) {
+					listCommon.add(list_input.get(j));
+					break;
+				}
+			}
+		}
+		list_input.removeAll(listCommon);
+		return list_input;
+	}
+
+	@Override
+	public ArrayList<String> contractsListToStringList(ArrayList<ContractsInfo> list) {
+		ArrayList<String> listString = new ArrayList<>();
+		if (list == null) {
+			return listString;
+		}
+
+		int size = list.size();
+		for (int i = 0; i < size; i++) {
+			listString.add(list.get(i).getEmailAddress());
+		}
+		return listString;
+	}
+
+	@Override
+	public void cancelRequest() {
+
+	}
+}

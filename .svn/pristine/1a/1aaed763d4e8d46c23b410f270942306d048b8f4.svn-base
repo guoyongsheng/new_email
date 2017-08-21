@@ -1,0 +1,26 @@
+/**
+ * @date2016-10-17
+   @userAdministrator
+   
+ */
+package com.zfsoft.zf_new_email.modules.emailtype;
+
+/**
+ * @author wesley
+ * @date 2016-10-17下午1:56:22
+ * @Description: presenter
+ */
+public class EmailTypePresenter implements EmailTypeContract.Presenter {
+
+	private EmailTypeContract.View view; // view层的引用
+
+	public EmailTypePresenter(EmailTypeContract.View view) {
+		this.view = view;
+		view.setPresenter(this);
+	}
+
+	@Override
+	public void cancelRequest() {
+
+	}
+}

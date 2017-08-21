@@ -1,0 +1,145 @@
+/**
+ * 
+ */
+package com.zfsoft.zf_new_email.modules.selectinnercontracts;
+
+import java.util.List;
+
+import android.graphics.drawable.AnimationDrawable;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.zfsoft.core.data.WebserviceConf;
+import com.zfsoft.core.utils.FileManager;
+import com.zfsoft.core.utils.PreferenceHelper;
+import com.zfsoft.zf_new_email.R;
+import com.zfsoft.zf_new_email.base.BaseFragment;
+import com.zfsoft.zf_new_email.entity.ContractsInfo;
+
+/**
+ * @author wesley
+ * @date: 2017-2-9
+ * @Description: ui展示
+ */
+public class SelectInnerContactFragment extends BaseFragment<SelectInnerContactPresenter> implements SelectInnerContactsContracts.View, OnClickListener {
+
+	private LinearLayout ll_add_contact; // 添加联系人
+	private LinearLayout ll_loading; // loading的布局
+	private ImageView iv_loading; // loading的图片
+	private AnimationDrawable animation; // 动画
+	private TextView tv_loading; // loading的文字
+	private LinearLayout ll_contact; // 联系人的布局
+	private ListView lv_list_view; // listview
+	private SelectInnerContactAdapter adapter; // 适配器
+
+	@Override
+	public int getLayoutId() {
+		return R.layout.fragment_select_inner_contact;
+	}
+
+	@Override
+	public void initVariables() {
+		adapter = new SelectInnerContactAdapter(context);
+	}
+
+	@Override
+	public void initViews(View view) {
+		ll_add_contact = (LinearLayout) ((SelectInnerContactsActivity) context).findViewById(R.id.include_head_home_linear);
+		ll_loading = (LinearLayout) view.findViewById(R.id.fragment_inner_contact_loading);
+		iv_loading = (ImageView) view.findViewById(R.id.fragment_inner_contact_image_loading);
+		tv_loading = (TextView) view.findViewById(R.id.fragment_inner_contact_tv_loading);
+		ll_contact = (LinearLayout) view.findViewById(R.id.fragment_inner_contact_content);
+		lv_list_view = (ListView) view.findViewById(R.id.fragment_inner_list_view);
+
+		lv_list_view.setAdapter(adapter);
+		animation = (AnimationDrawable) iv_loading.getBackground();
+		ll_add_contact.setVisibility(View.VISIBLE);
+		ll_add_contact.setOnClickListener(this);
+		ll_loading.setOnClickListener(this);
+
+		loadData(getUrl(), getToken());
+	}
+
+	public static SelectInnerContactFragment newInstance() {
+		return new SelectInnerContactFragment();
+	}
+
+	@Override
+	public void onClick(View view) {
+		if (view == null) {
+			return;
+		}
+
+		int key = view.getId();
+		if (key == R.id.include_head_home_linear) {
+			// 添加联系人
+		} else if (key == R.id.fragment_inner_contact_loading) {
+			// 重新加载
+			loadData(getUrl(), getToken());
+		}
+	}
+
+	@Override
+	public String getUrl() {
+		return FileManager.getIp(context) + WebserviceConf.ENDPOINT_OA_EMAIL;
+	}
+
+	@Override
+	public String getToken() {
+		return PreferenceHelper.token_read(context);
+	}
+
+	@Override
+	public void loadData(String url, String token) {
+		presenter.loadData(url, token);
+	}
+
+	@Override
+	public void startAnimation() {
+
+		if (animation != null) {
+			animation.start();
+		}
+		initLoading();
+	}
+
+	@Override
+	public void stopAnimation() {
+
+		if (animation != null) {
+			animation.stop();
+		}
+	}
+
+	@Override
+	public void loadSuccess(List<ContractsInfo> list) {
+		tv_loading.setText(R.string.loading);
+		ll_loading.setVisibility(View.GONE);
+		ll_contact.setVisibility(View.VISIBLE);
+
+		adapter.notifyDataSetChanged(list);
+	}
+
+	@Override
+	public void loadFailure(String errorMessage) {
+		initContent();
+	}
+
+	@Override
+	public void initLoading() {
+		tv_loading.setText(R.string.loading);
+		ll_loading.setVisibility(View.VISIBLE);
+		ll_contact.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void initContent() {
+		tv_loading.setText(R.string.loading_again);
+		ll_loading.setVisibility(View.VISIBLE);
+		ll_contact.setVisibility(View.GONE);
+	}
+}

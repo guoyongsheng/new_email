@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/head_height_common"
+    android:background="@color/color_bule" >
+
+    <LinearLayout
+        android:id="@+id/inclue_head_back_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/incluce_head_back"
+            android:layout_width="@dimen/back_size"
+            android:layout_height="@dimen/back_size"
+            android:adjustViewBounds="true"
+            android:background="@null"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitXY"
+            android:src="@drawable/commmon_btn_back_default" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/include_head_home_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/common_icon_padding"
+        android:paddingRight="@dimen/common_icon_padding"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/incluce_head_home"
+            android:layout_width="@dimen/common_icon_size"
+            android:layout_height="@dimen/common_icon_size"
+            android:background="@null"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/include_head_loading"
+                android:layout_width="@dimen/common_icon_bottom_size"
+                android:layout_height="@dimen/common_icon_bottom_size"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:background="@drawable/loading"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/include_head_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/font_big" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/include_head_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/font_small"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>

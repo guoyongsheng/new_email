@@ -1,0 +1,61 @@
+/**
+ * 
+ */
+package com.zfsoft.zf_new_email.modules.selectinnercontracts;
+
+import java.util.List;
+
+import com.zfsoft.zf_new_email.entity.ContractsInfo;
+import com.zfsoft.zf_new_email.listener.CallBackListener;
+
+/**
+ * @author wesley
+ * @date: 2017-2-9
+ * @Description:
+ */
+public class SelectInnerContactPresenter implements SelectInnerContactsContracts.Presenter {
+
+	private SelectInnerContactsContracts.View view;
+	private SelectInnerContactServiceImpl impl;
+
+	public SelectInnerContactPresenter(SelectInnerContactsContracts.View view) {
+		this.view = view;
+		view.setPresenter(this);
+		impl = new SelectInnerContactServiceImpl();
+	}
+
+	@Override
+	public void cancelRequest() {
+
+	}
+
+	@Override
+	public void loadData(String url, String token) {
+
+		view.startAnimation();
+		impl.loadData(url, token, new CallBackListener<List<ContractsInfo>>() {
+
+			@Override
+			public void onSuccess(List<ContractsInfo> data) {
+
+				if (!view.isActive()) {
+					return;
+				}
+
+				view.stopAnimation();
+				view.loadSuccess(data);
+			}
+
+			@Override
+			public void onFailure(String errorMessage) {
+
+				if (!view.isActive()) {
+					return;
+				}
+
+				view.stopAnimation();
+				view.loadFailure(errorMessage);
+			}
+		});
+	}
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/email_type_padding_top_bottom"
+    android:paddingTop="@dimen/email_type_padding_top_bottom" >
+
+    <ImageView
+        android:id="@+id/item_image_icon"
+        android:layout_width="@dimen/common_icon_bottom_size"
+        android:layout_height="@dimen/common_icon_bottom_size"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_icon_no_mail"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/item_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/item_email_list_margin"
+        android:textSize="@dimen/font_small" />
+
+</LinearLayout>

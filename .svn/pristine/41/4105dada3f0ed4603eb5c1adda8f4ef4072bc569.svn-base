@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_gray_lighter" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/slide_menu_email_get"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:background="@color/color_white" >
+
+            <ImageView
+                android:id="@+id/slide_menu_email_get_icon"
+                android:layout_width="@dimen/common_icon_size"
+                android:layout_height="@dimen/common_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/image_icon_inbox" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_toRightOf="@id/slide_menu_email_get_icon"
+                android:text="@string/email_get"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/slide_menu_email_get_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icontact" />
+
+            <TextView
+                android:id="@+id/slide_menu_email_get_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:layout_toLeftOf="@id/slide_menu_email_get_arrow"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_efefef" />
+
+        <RelativeLayout
+            android:id="@+id/slide_menu_email_not_read"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:background="@color/color_white" >
+
+            <ImageView
+                android:id="@+id/slide_menu_email_not_read_icon"
+                android:layout_width="@dimen/common_icon_size"
+                android:layout_height="@dimen/common_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/image_icon_unread" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_toRightOf="@id/slide_menu_email_not_read_icon"
+                android:text="@string/email_not_read"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/slide_menu_email_not_read_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icontact" />
+
+            <TextView
+                android:id="@+id/slide_menu_email_not_read_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:layout_toLeftOf="@id/slide_menu_email_not_read_arrow"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_efefef" />
+
+        <RelativeLayout
+            android:id="@+id/slide_menu_email_star"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:background="@color/color_white" >
+
+            <ImageView
+                android:id="@+id/slide_menu_email_star_icon"
+                android:layout_width="@dimen/common_icon_size"
+                android:layout_height="@dimen/common_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/image_icon_insterall" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_toRightOf="@id/slide_menu_email_star_icon"
+                android:text="@string/email_star"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/slide_menu_email_star_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icontact" />
+
+            <TextView
+                android:id="@+id/slide_menu_email_star_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:layout_toLeftOf="@id/slide_menu_email_star_arrow"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_efefef" />
+
+        <RelativeLayout
+            android:id="@+id/slide_menu_email_cao"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:background="@color/color_white" >
+
+            <ImageView
+                android:id="@+id/slide_menu_email_cao_icon"
+                android:layout_width="@dimen/common_icon_size"
+                android:layout_height="@dimen/common_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/image_icon_draft" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_toRightOf="@id/slide_menu_email_cao_icon"
+                android:text="@string/email_cao"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/slide_menu_email_cao_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icontact" />
+
+            <TextView
+                android:id="@+id/slide_menu_email_cao_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:layout_toLeftOf="@id/slide_menu_email_cao_arrow"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_efefef" />
+
+        <RelativeLayout
+            android:id="@+id/slide_menu_email_send"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:background="@color/color_white" >
+
+            <ImageView
+                android:id="@+id/slide_menu_email_send_icon"
+                android:layout_width="@dimen/common_icon_size"
+                android:layout_height="@dimen/common_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_icon_sended" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_toRightOf="@id/slide_menu_email_send_icon"
+                android:text="@string/email_send"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/slide_menu_email_send_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icontact" />
+
+            <TextView
+                android:id="@+id/slide_menu_email_send_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:layout_toLeftOf="@id/slide_menu_email_send_arrow"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_efefef" />
+
+        <RelativeLayout
+            android:id="@+id/slide_menu_email_delete"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:background="@color/color_white" >
+
+            <ImageView
+                android:id="@+id/slide_menu_email_delete_icon"
+                android:layout_width="@dimen/common_icon_size"
+                android:layout_height="@dimen/common_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/image_icon_deleted" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_toRightOf="@id/slide_menu_email_delete_icon"
+                android:text="@string/email_delete"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/slide_menu_email_delete_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icontact" />
+
+            <TextView
+                android:id="@+id/slide_menu_email_delete_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/email_check_edit_padding"
+                android:layout_toLeftOf="@id/slide_menu_email_delete_arrow"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_grayer" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:layout_marginTop="@dimen/view_divider_height"
+            android:background="@color/color_grayer" />
+
+        <ListView
+            android:id="@+id/slide_menu_list_account"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/color_gray_lighter"
+            android:dividerHeight="@dimen/view_height"
+            android:visibility="visible" >
+        </ListView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:layout_marginTop="@dimen/view_divider_height"
+            android:background="@color/color_grayer" />
+
+        <RelativeLayout
+            android:id="@+id/slide_menu_add_account"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height_common"
+            android:background="@color/color_white" >
+
+            <ImageView
+                android:id="@+id/slide_menu_add_account_icon"
+                android:layout_width="@dimen/common_icon_size"
+                android:layout_height="@dimen/common_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/image_icon_add_account" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_toRightOf="@id/slide_menu_add_account_icon"
+                android:text="@string/add_account"
+                android:textColor="@color/color_bule_light"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:background="@color/color_grayer" />
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,516 @@
+/**
+ * @date2016-10-18
+   @userAdministrator
+   
+ */
+package com.zfsoft.zf_new_email.entity;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import javax.mail.Flags;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Part;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
+import javax.mail.util.ByteArrayDataSource;
+import android.os.Environment;
+import com.zfsoft.core.utils.Logger;
+import com.zfsoft.zf_new_email.util.IOUtil;
+import com.zfsoft.zf_new_email.util.TranCharsetUtil;
+
+/**
+ * @author wesley
+ * @date 2016-10-18上午11:45:51
+ * @Description: 邮件接收者
+ */
+public class MailReceiver {
+
+	private final static String TAG = "MailReceiver";
+	private MimeMessage mimeMessage = null;
+	private String charset;
+	private String dataFormat = "yyyy-MM-dd hh:mm:ss";
+	private StringBuffer mailContent = new StringBuffer();// 邮件内容
+	private boolean html = false;
+	private boolean flag = true;
+	private ArrayList<Attachment> attachments = new ArrayList<>();
+	private ArrayList<String> attachmentsInputStreams = new ArrayList<>();
+	private int mailCount;
+	private boolean isHasAttachment; // 是否有附件
+	private Message message;
+	private long totalSize;
+
+	private boolean isDetail;
+
+	public MailReceiver(MimeMessage mimeMessage, Message message, boolean isDetail) {
+		this.mimeMessage = mimeMessage;
+		this.message = message;
+		this.isDetail = isDetail;
+		try {
+			charset = parseCharset(mimeMessage.getContentType());
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 解析字符集编码
+	 * 
+	 * @param contentType
+	 *            编码方式
+	 * @return 编码方式
+	 */
+	private String parseCharset(String contentType) {
+		if (contentType == null || !contentType.contains("charset")) {
+			return null;
+		}
+		if (contentType.contains("gbk")) {
+			return "GBK";
+		} else if (contentType.contains("GB2312") || contentType.contains("gb18030")) {
+			return "gb2312";
+		} else {
+			String sub = contentType.substring(contentType.indexOf("charset") + 8).replace("\"", "");
+			if (sub.contains(";")) {
+				return sub.substring(0, sub.indexOf(";"));
+			} else {
+				return sub;
+			}
+		}
+	}
+
+	/**
+	 * 取得「message-ID」
+	 * 
+	 * @throws MessagingException
+	 */
+	public String getMessageID() {
+		try {
+			return mimeMessage.getMessageID();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+
+		return "";
+	}
+
+	/**
+	 * 获取发件人姓名
+	 * 
+	 * @return 发件人姓名
+	 */
+	public String getSenderName() {
+		InternetAddress address[];
+		try {
+			address = (InternetAddress[]) mimeMessage.getFrom();
+			if (address == null || address.length <= 0) {
+				return "";
+			}
+			String name = address[0].getPersonal();
+			if (name == null) {
+				name = "";
+			} else if (charset == null) {
+				name = TranCharsetUtil.TranEncodeTOGB(name);
+			}
+			return name;
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	/**
+	 * 获取发件人的邮箱地址
+	 * 
+	 * @return 发件人邮箱地址
+	 */
+	public String getSenderAddress() {
+		InternetAddress address[];
+		try {
+			address = (InternetAddress[]) mimeMessage.getFrom();
+			if (address == null || address.length <= 0) {
+				return "";
+			}
+			String addr = address[0].getAddress();
+			if (addr == null) {
+				addr = "";
+			}
+			return addr;
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	/**
+	 * 获取收件人的地址
+	 * 
+	 * @return 收件人的地址
+	 */
+	public ArrayList<String> getReceiveAddress() {
+		ArrayList<String> list = new ArrayList<>();
+		InternetAddress[] address;
+		try {
+			address = (InternetAddress[]) mimeMessage.getRecipients(Message.RecipientType.TO);
+			if (address != null) {
+				for (InternetAddress addres : address) {
+					String receiveAddress = addres.getAddress();
+					if (receiveAddress != null) {
+						receiveAddress = MimeUtility.decodeText(receiveAddress);
+					} else {
+						receiveAddress = "";
+					}
+					list.add(receiveAddress);
+				}
+				return list;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/**
+	 * 获取收件人姓名
+	 * 
+	 * @return 收件人姓名
+	 */
+	public ArrayList<String> getReceiveName() {
+		ArrayList<String> list = new ArrayList<>();
+		InternetAddress[] address;
+		try {
+			address = (InternetAddress[]) mimeMessage.getRecipients(Message.RecipientType.TO);
+			if (address != null) {
+				for (InternetAddress addres : address) {
+					String receiveName = addres.getPersonal();
+					if (receiveName != null) {
+						receiveName = MimeUtility.decodeText(receiveName);
+					} else {
+						receiveName = "";
+					}
+					list.add(receiveName);
+				}
+				return list;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/**
+	 * 取得邮件主題
+	 * 
+	 * @return 邮件主题
+	 */
+	public String getSubject() {
+		String subject = "";
+		try {
+			subject = mimeMessage.getSubject();
+			if (subject.contains("=?gb18030?")) {
+				subject = subject.replace("gb18030", "gb2312");
+			}
+			subject = MimeUtility.decodeText(subject);
+			if (charset == null) {
+				subject = TranCharsetUtil.TranEncodeTOGB(subject);
+			}
+		} catch (Exception ignored) {
+			ignored.printStackTrace();
+		}
+		return subject;
+	}
+
+	/**
+	 * 获取邮件发送日期
+	 * 
+	 * @return 邮件发送日期
+	 */
+	public String getSentData() {
+		Date sentdata;
+		try {
+			sentdata = mimeMessage.getSentDate();
+			if (sentdata != null) {
+				SimpleDateFormat format = new SimpleDateFormat(dataFormat, Locale.getDefault());
+				return format.format(sentdata);
+			}
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return "未知";
+	}
+
+	/**
+	 * 获取邮件内容
+	 * 
+	 * @return 邮件的内容
+	 */
+	public String getMailContent() {
+		mailContent = new StringBuffer();
+		try {
+			compileMailContent(mimeMessage);
+			String content = mailContent.toString();
+			mailContent.setLength(0);
+			if (isHasAttachment && content.contains("[attachment]")) {
+				content = content.substring(0, content.indexOf("[attachment]"));
+			}
+			return content;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	/**
+	 * 解析邮件内容
+	 * 
+	 * @param part
+	 *            邮件的body
+	 */
+	private void compileMailContent(Part part) {
+		String contentType;
+		try {
+			contentType = part.getContentType();
+			boolean connName = false;
+			if (contentType != null && contentType.contains("name")) {
+				connName = true;
+			}
+			String charset = parseCharset(contentType);
+			if (part.isMimeType("text/html") && !connName && flag) {
+				html = true;
+				String content = "";
+				Object object = part.getContent();
+				if (object instanceof InputStream) {
+					content = parseInputStream((InputStream) object, charset);
+				} else {
+					content = String.valueOf(object);
+				}
+				mailContent.append(content);
+			} else if (part.isMimeType("text/plain") && !connName && flag) {
+				flag = true;
+				String content = "";
+				Object object = part.getContent();
+				if (object instanceof InputStream) {
+					content = parseInputStream((InputStream) object, charset);
+				} else {
+					content = String.valueOf(object);
+				}
+				mailContent.append(content);
+			} else if (part.isMimeType("multipart/mixed") || part.isMimeType("message/rfc822")) {
+				Object content = part.getContent();
+				if (content instanceof Multipart) {
+					Multipart multipart = (Multipart) content;
+					int counts = multipart.getCount();
+					for (int i = 0; i < counts; i++) {
+						compileMailContent(multipart.getBodyPart(i));
+					}
+				} else {
+					InputStream inputStream = part.getInputStream();
+					ByteArrayDataSource dataSource = new ByteArrayDataSource(inputStream, "multipart/*");
+					Multipart multipart = new MimeMultipart(dataSource);
+					int counts = multipart.getCount();
+					for (int i = 0; i < counts; i++) {
+						compileMailContent(multipart.getBodyPart(i));
+					}
+				}
+			} else if (part.isMimeType("multipart/alternative") || part.isMimeType("multipart/related")) {
+				Object content = part.getContent();
+				if (content instanceof Multipart) {
+					Multipart multipart = (Multipart) content;
+					int counts = multipart.getCount();
+					if (counts >= 1) {
+						compileMailContent(multipart.getBodyPart(counts - 1));
+					}
+				} else {
+					InputStream inputStream = part.getInputStream();
+					ByteArrayDataSource dataSource = new ByteArrayDataSource(inputStream, "multipart/alternative");
+					Multipart multipart = new MimeMultipart(dataSource);
+					int counts = multipart.getCount();
+					if (counts >= 1) {
+						compileMailContent(multipart.getBodyPart(counts - 1));
+					}
+				}
+			} else if ((part.getDisposition() != null && part.getDisposition().equals(Part.ATTACHMENT)) || part.isMimeType("image/*")) {
+
+				isHasAttachment = true;
+				if (isDetail) {
+					// 获取附件
+					String filename = part.getFileName();
+					if (filename != null) {
+						if (filename.contains("=?gb18030?")) {
+							filename = filename.replace("gb18030", "gb2312");
+						}
+						Attachment attachment = new Attachment();
+						filename = MimeUtility.decodeText(filename);
+						String path = Environment.getExternalStorageDirectory().toString() + "/temp/" + filename;
+						//String path = BaseApplication.getInstance().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + filename;
+						if (part instanceof MimeBodyPart) {
+							File file = new File(path);
+							if (!file.exists()) {
+								if (IOUtil.createFile(path)) {
+									file = new File(path);
+									((MimeBodyPart) part).saveFile(file);
+								}
+							}
+							attachment.setFilePath(path);
+							attachment.setFileSize(Attachment.convertStorage(file.length()));
+							attachment.setFileName(filename);
+							attachment.setFileLength(file.length());
+							attachments.add(attachment);
+							totalSize = totalSize + file.length();
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			Logger.print(TAG, " compileMailContent 邮件解析失败  失败信息:" + e.getMessage());
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			Logger.print(TAG, " compileMailContent 邮件解析失败  失败信息:" + e.getMessage());
+		}
+	}
+
+	/**
+	 * 获取邮件的类型
+	 * 
+	 * @return 0:普通邮件 1:回复邮件 2:转发邮件
+	 */
+	public int getMailType() {
+		try {
+			Flags flags = message.getFlags();
+			if (flags.contains(Flags.Flag.ANSWERED)) {
+				return 1;
+			}
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	/**
+	 * 解析流格式
+	 * 
+	 * @param is
+	 *            流
+	 * @throws IOException
+	 * @throws MessagingException
+	 */
+	private String parseInputStream(InputStream is, String charset) {
+		StringBuilder str = new StringBuilder();
+		byte[] readByte = new byte[1024];
+		int count;
+		try {
+			while ((count = is.read(readByte)) != -1) {
+				if (charset == null) {
+					str.append(new String(readByte, 0, count, "utf-8"));
+				} else {
+					str.append(new String(readByte, 0, count, charset));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Logger.print(TAG, " parseInputStream 流解析失败  失败信息:" + e.getMessage());
+		}
+		try {
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Logger.print(TAG, " parseInputStream 流解析失败  失败信息:" + e.getMessage());
+		}
+		return str.toString();
+	}
+
+	/**
+	 * 是否有回执
+	 * 
+	 * @throws MessagingException
+	 */
+	public boolean getReplySign() throws MessagingException {
+		boolean replySign = false;
+		String needreply[] = mimeMessage.getHeader("Disposition-Notification-To");
+		if (needreply != null) {
+			replySign = true;
+		}
+		return replySign;
+	}
+
+	public boolean isHtml() {
+		return html;
+	}
+
+	/**
+	 * 判断邮件已读还是未读
+	 * 
+	 * @return true：未读 false：已读
+	 */
+	public boolean isNew() {
+		Flags flags;
+		try {
+			flags = message.getFlags();
+			return flags.contains(Flags.Flag.SEEN) ? false : true;
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * 判断是否是星标邮件
+	 * 
+	 * @return true:是 false:不是
+	 */
+	public boolean isFlaged() {
+		Flags flags;
+		try {
+			flags = message.getFlags();
+			return flags.contains(Flags.Flag.FLAGGED) ? true : false;
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public ArrayList<Attachment> getAttachments() {
+		return attachments;
+	}
+
+	public ArrayList<String> getAttachmentsInputStreams() {
+		return attachmentsInputStreams;
+	}
+
+	public String getCharset() {
+		return charset;
+	}
+
+	public int getMailCount() {
+		return mailCount;
+	}
+
+	public void setMailCount(int mailCount) {
+		this.mailCount = mailCount;
+	}
+
+	public int getMessageNumber() {
+		return mimeMessage.getMessageNumber();
+	}
+
+	public boolean isHasAttachment() {
+		return isHasAttachment;
+	}
+
+	public void setHasAttachment(boolean isHasAttachment) {
+		this.isHasAttachment = isHasAttachment;
+	}
+
+	public long getTotalSize() {
+		return totalSize;
+	}
+}

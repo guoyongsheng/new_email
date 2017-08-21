@@ -1,0 +1,537 @@
+/**
+ * 
+ */
+package com.zfsoft.zf_new_email.modules.emailsearch;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
+import com.zfsoft.core.data.WebserviceConf;
+import com.zfsoft.core.utils.FileManager;
+import com.zfsoft.core.utils.PreferenceHelper;
+import com.zfsoft.zf_new_email.R;
+import com.zfsoft.zf_new_email.base.BaseFragment;
+import com.zfsoft.zf_new_email.constant.Constant;
+import com.zfsoft.zf_new_email.entity.Email;
+import com.zfsoft.zf_new_email.entity.HistoryInfo;
+import com.zfsoft.zf_new_email.modules.emaildetail.EmailDetailActivity;
+import com.zfsoft.zf_new_email.util.SharedPreferencedUtis;
+import com.zfsoft.zf_new_email.util.SoftPanUtis;
+
+/**
+ * @author wesley
+ * @date: 2016-11-22
+ * @Description: ui展示层
+ */
+public class EmailSearchFragment extends BaseFragment<EmailSearchPresenter> implements EmailSearchContract.View, OnItemHistoryClickListener, OnClickListener {
+
+	private ListView lv_history; // 历史记录
+	private LinearLayout ll_search_type; // 搜索类别
+	private RadioGroup radioGroup; // 组
+	private ListView listvMenuView; // 内容的listview
+	private int type_in_oa; // 1:收件箱
+	private int type; // 0:收件箱 1:未读邮件 2:草稿箱 3:已发送 4:已删除 5:星标邮件
+	private int email_type; // 邮件类型
+	private EmailSearchHistoryAdapter historyAdapter; // 历史记录的适配器
+	private EmailSearchContentAdapter contentAdapter; // 搜索内容的适配器
+	private EditText et_search_content; // 搜索的内容
+	private int startPosition; // 开始搜索的位置
+	private ProgressDialog dialog; // 对话框
+	private int status; // 0:发件人 1:收件人 2:主题 3:全部
+	private ImageView iv_clear; // 清空搜索内容
+	private TextView tv_back; // 返回
+	private boolean isLoading; // 是否正在滚动
+	private LinearLayout ll_empty_view; // 没有邮件时的view
+	private ImageView incluce_head_back; // 返回图标
+	private TextView include_head_title; // 标题
+	private int startPage = 1;
+	private boolean isLoadAll = false;
+	private static final int PAGE_SIZE = 10;
+
+	@Override
+	public int getLayoutId() {
+		return R.layout.fragment_email_search;
+	}
+
+	@Override
+	public void initVariables() {
+		handleIntent();
+		initHistoryAdapter();
+		initContentAdapter();
+	}
+
+	@Override
+	public void initViews(View view) {
+		incluce_head_back = (ImageView) ((EmailSearchActivity) context).findViewById(R.id.incluce_head_back);
+		include_head_title = (TextView) ((EmailSearchActivity) context).findViewById(R.id.include_head_title);
+		include_head_title.setText(R.string.search);
+		lv_history = (ListView) view.findViewById(R.id.email_search_history);
+		ll_search_type = (LinearLayout) view.findViewById(R.id.email_search_linear);
+		radioGroup = (RadioGroup) view.findViewById(R.id.emal_search_group);
+		listvMenuView = (ListView) view.findViewById(R.id.fragment_email_list);
+		et_search_content = (EditText) ((EmailSearchActivity) context).findViewById(R.id.et_search_content);
+		iv_clear = (ImageView) ((EmailSearchActivity) context).findViewById(R.id.email_clear_icon);
+		tv_back = (TextView) ((EmailSearchActivity) context).findViewById(R.id.email_search_cancle);
+		ll_empty_view = (LinearLayout) view.findViewById(R.id.commom_empty_view);
+
+		listvMenuView.setAdapter(contentAdapter);
+		lv_history.setAdapter(historyAdapter);
+		List<HistoryInfo> listHistory = getHistory();
+		if (listHistory == null || listHistory.size() == 0) {
+			lv_history.setVisibility(View.GONE);
+		} else {
+			lv_history.setVisibility(View.VISIBLE);
+			historyAdapter.setDataSource(listHistory);
+		}
+
+		if (email_type == Constant.EMAIL_TYPE_OA) {
+			ll_search_type.setVisibility(View.GONE);
+		}
+
+		// 事件
+		et_search_content.addTextChangedListener(new OnTextChangeListener());
+		et_search_content.setOnEditorActionListener(new OnTextEditorListener());
+		radioGroup.setOnCheckedChangeListener(new OnChangedChangeRadioGroup());
+		lv_history.setOnItemClickListener(new OnItemClickListView(0));
+		listvMenuView.setOnItemClickListener(new OnItemClickListView(1));
+		listvMenuView.setOnScrollListener(new OnScrollListView());
+		iv_clear.setOnClickListener(this);
+		tv_back.setOnClickListener(this);
+		incluce_head_back.setOnClickListener(this);
+	}
+
+	// 实例化对象
+	public static EmailSearchFragment newInstance(int type, int email_type, int type_in_oa) {
+		Bundle bundle = new Bundle();
+		bundle.putInt("type", type);
+		bundle.putInt("email_type", email_type);
+		bundle.putInt("type_in_oa", type_in_oa);
+		EmailSearchFragment fragment = new EmailSearchFragment();
+		fragment.setArguments(bundle);
+		return fragment;
+	}
+
+	// 处理handle
+	private void handleIntent() {
+		Bundle bundle = getArguments();
+		if (bundle != null) {
+			type = bundle.getInt("type");
+			email_type = bundle.getInt("email_type");
+			type_in_oa = bundle.getInt("type_in_oa");
+		}
+	}
+
+	// 初始化历史记录适配器
+	private void initHistoryAdapter() {
+		historyAdapter = new EmailSearchHistoryAdapter(context);
+		historyAdapter.setOnItemHistoryClickListener(this);
+	}
+
+	// 初始化邮件内容适配器
+	private void initContentAdapter() {
+		contentAdapter = new EmailSearchContentAdapter(context);
+		contentAdapter.setInboxType(type);
+	}
+
+	@Override
+	public List<HistoryInfo> getHistory() {
+		return SharedPreferencedUtis.getHistory(context);
+	}
+
+	@Override
+	public void onDeleteClick(int position) {
+		List<HistoryInfo> list = historyAdapter.getAllItems();
+		if (list != null && list.size() > position) {
+			list.remove(position);
+			historyAdapter.setDataSource(list);
+			SharedPreferencedUtis.saveHistory(list, context);
+		}
+	}
+
+	// 监听文本改变
+	private class OnTextChangeListener implements TextWatcher {
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			if (s == null || s.toString().length() == 0) {
+				historyAdapter.setDataSource(getHistory());
+				lv_history.setVisibility(View.VISIBLE);
+				iv_clear.setVisibility(View.INVISIBLE);
+				ll_search_type.setVisibility(View.GONE);
+				listvMenuView.setVisibility(View.GONE);
+				ll_empty_view.setVisibility(View.GONE);
+			} else {
+				contentAdapter.clearItems();
+				lv_history.setVisibility(View.GONE);
+				iv_clear.setVisibility(View.VISIBLE);
+				ll_search_type.setVisibility(View.VISIBLE);
+				listvMenuView.setVisibility(View.VISIBLE);
+				ll_empty_view.setVisibility(View.GONE);
+				if (email_type == Constant.EMAIL_TYPE_OA) {
+					ll_search_type.setVisibility(View.GONE);
+					loadDataInOA(type_in_oa, 1, PAGE_SIZE, getUrl(0), getToken(), true, s.toString());
+				} else {
+					searchMail(0, type, status, s.toString(), true);
+				}
+			}
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+
+		}
+	}
+
+	// 监听搜索键
+	private class OnTextEditorListener implements OnEditorActionListener {
+		@Override
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			if (event == null) {
+				return false;
+			}
+			String content = getSearchContent();
+			if (TextUtils.isEmpty(content)) {
+				return false;
+			}
+			if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_SEARCH) {
+				saveSearchHistory(content);
+				contentAdapter.clearItems();
+				if (email_type == Constant.EMAIL_TYPE_OA) {
+					loadDataInOA(type_in_oa, 1, PAGE_SIZE, getUrl(0), getToken(), true, content);
+				} else {
+					searchMail(0, type, status, content, true);
+				}
+				return true;
+			}
+			return false;
+		}
+	}
+
+	// 内部类---选中时改变状态
+	private class OnChangedChangeRadioGroup implements OnCheckedChangeListener {
+
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			if (checkedId == R.id.email_search_sender) {
+				status = 0;
+			} else if (checkedId == R.id.email_search_getter) {
+				status = 1;
+			} else if (checkedId == R.id.email_search_subject) {
+				status = 2;
+			} else if (checkedId == R.id.email_search_all) {
+				status = 3;
+			}
+			showCommonView();
+			contentAdapter.clearItems();
+			startPosition = 0;
+			searchMail(startPosition, type, status, getSearchContent(), true);
+		}
+	}
+
+	// 内部类
+	private class OnItemClickListView implements OnItemClickListener {
+
+		private int types;
+
+		public OnItemClickListView(int types) {
+			this.types = types;
+		}
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			switch (types) {
+			/**
+			 * 历史记录
+			 */
+			case 0:
+				SoftPanUtis.hidePan(context);
+				List<HistoryInfo> listHistory = historyAdapter.getAllItems();
+				if (listHistory != null && listHistory.size() > position) {
+					String content = listHistory.get(position).getContent();
+					et_search_content.setText(content);
+					if (content != null) {
+						et_search_content.setSelection(content.length());
+					}
+					saveSearchHistory(listHistory.get(position).getContent());
+				}
+				break;
+
+			/**
+			 * 内容
+			 */
+			case 1:
+				List<Email> listEmail = contentAdapter.getAllItems();
+				Intent intent = new Intent(context, EmailDetailActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putInt("position", position);
+				bundle.putSerializable("list", (Serializable) listEmail);
+				bundle.putInt("type", type);
+				bundle.putInt("type_in_oa", type_in_oa);
+				bundle.putInt("email_type", email_type);
+				intent.putExtras(bundle);
+				startActivityForResult(intent, Constant.REQUEST_CODE_LIST_TO_DETAIL);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	// 内部类---滚动加载
+	private class OnScrollListView implements OnScrollListener {
+
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+			switch (scrollState) {
+			/**
+			 * 滚动之前
+			 */
+			case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+				break;
+
+			/**
+			 * 不滚动时
+			 */
+			case OnScrollListener.SCROLL_STATE_IDLE:
+				int lastVisiblePosition = view.getLastVisiblePosition();
+				int count = view.getCount();
+				if (lastVisiblePosition + 1 == count && !isLoading && !isLoadAll) {
+					if (email_type == Constant.EMAIL_TYPE_OA) {
+						loadDataInOA(type_in_oa, startPage, PAGE_SIZE, getUrl(0), getToken(), false, getSearchContent());
+					} else {
+						searchMail(startPosition, type, status, getSearchContent(), false);
+					}
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+		}
+	}
+
+	@Override
+	public String getSearchContent() {
+		return et_search_content.getText().toString();
+	}
+
+	@Override
+	public void searchMail(int startPosition, int type, int status, String content, boolean isRefreshing) {
+		isLoading = true;
+		contentAdapter.setIsRefreshing(isRefreshing);
+		this.startPosition = startPosition;
+		presenter.searchMail(startPosition, type, status, content, isRefreshing);
+	}
+
+	@Override
+	public void showErrorMessage(String errorMessage) {
+		Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onSuccess(List<Email> list) {
+		if (list != null && list.size() > 0) {
+			isLoading = false;
+			startPosition = list.size() + startPosition;
+			showCommonView();
+			int status = list.get(0).getInbox_type();
+			if (status == this.status) {
+				contentAdapter.setDataSource(list);
+			}
+		} else {
+			isLoading = true;
+		}
+	}
+
+	@Override
+	public void showDataInOA(ArrayList<Email> list) {
+		isLoading = false;
+		startPage = startPage + 1;
+		showCommonView();
+		contentAdapter.setDataSource(list);
+		if (list != null && list.size() > 0) {
+			if (contentAdapter.getCount() == list.get(0).getTotalEmailCount()) {
+				isLoadAll = true;
+			} else {
+				isLoadAll = false;
+			}
+		}
+	}
+
+	@Override
+	public void showProgressDialog() {
+		if (dialog == null) {
+			dialog = new ProgressDialog(context);
+			dialog.setMessage(getResources().getString(R.string.searching));
+		}
+		dialog.show();
+	}
+
+	@Override
+	public void hideProgressDialog() {
+		if (dialog != null && dialog.isShowing()) {
+			dialog.dismiss();
+		}
+	}
+
+	@Override
+	public void onClick(View view) {
+		if (view == null) {
+			return;
+		}
+
+		int key = view.getId();
+		if (key == R.id.email_clear_icon) {
+			et_search_content.setText("");
+		} else if (key == R.id.email_search_cancle) {
+			context.finish();
+		} else if (key == R.id.incluce_head_back) {
+			context.finish();
+		}
+	}
+
+	@Override
+	public void saveSearchHistory(String content) {
+		List<HistoryInfo> list = getHistory();
+		list = presenter.getHistoryList(list, content);
+		SharedPreferencedUtis.saveHistory(list, context);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == Constant.REQUEST_CODE_LIST_TO_DETAIL && resultCode == Constant.RESULT_CODE_DETAIL_BACK_LIST) {
+
+			if (data != null) {
+				Bundle bundle = data.getExtras();
+				if (bundle != null) {
+					int position = bundle.getInt("position");
+					deleteMail(position);
+				}
+			} else {
+				if (email_type == Constant.EMAIL_TYPE_OA) {
+					loadDataInOA(type_in_oa, 1, PAGE_SIZE, getUrl(0), getToken(), true, getSearchContent());
+				} else {
+					searchMail(0, type, status, getSearchContent(), true);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void showEmptyView() {
+		lv_history.setVisibility(View.GONE);
+		ll_search_type.setVisibility(View.VISIBLE);
+		if (email_type == Constant.EMAIL_TYPE_OA) {
+			ll_search_type.setVisibility(View.GONE);
+		}
+		ll_empty_view.setVisibility(View.VISIBLE);
+		listvMenuView.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void showCommonView() {
+		lv_history.setVisibility(View.GONE);
+		ll_search_type.setVisibility(View.VISIBLE);
+		if (email_type == Constant.EMAIL_TYPE_OA) {
+			ll_search_type.setVisibility(View.GONE);
+		}
+		ll_empty_view.setVisibility(View.GONE);
+		listvMenuView.setVisibility(View.VISIBLE);
+	}
+
+	// 删除邮件
+	private void deleteMail(int position) {
+		List<Email> list = contentAdapter.getAllItems();
+		if (list != null && list.size() > position && list.get(position) != null) {
+			isLoading = true;
+			Email email = list.get(position);
+			contentAdapter.removeItem(position);
+			int messageNumber = email.getMessageNumber();
+			String messageId = email.getMessageID();
+			if (email_type == Constant.EMAIL_TYPE_OA) {
+				String[] array = new String[1];
+				array[0] = messageId;
+				presenter.deleteMailInOA(array, String.valueOf(type_in_oa), getUrl(1), getToken(), position, email, 0);
+			} else {
+				presenter.deleteMailByMessageId(messageId, email_type, messageNumber, position, type, email, status, getSearchContent(), startPosition);
+			}
+		}
+	}
+
+	@Override
+	public void deleteFailure(int position, Email email) {
+		contentAdapter.insertItem(position, email);
+	}
+
+	@Override
+	public void loadDataInOA(int type, int start, int size, String endpoint, String app_token, boolean isRefreshing, String cond) {
+		this.startPage = start;
+		isLoading = true;
+		contentAdapter.setIsRefreshing(isRefreshing);
+		presenter.loadDataInOA(type, start, size, endpoint, app_token, cond, isRefreshing);
+	}
+
+	@Override
+	public String getUrl(int type) {
+		switch (type) {
+		/**
+		 * 搜索
+		 */
+		case 0:
+			return FileManager.getIp(context) + WebserviceConf.ENDPOINT_OA_EMAIL;
+
+			/**
+			 * 删除
+			 */
+		case 1:
+			return FileManager.getIp(context) + WebserviceConf.ENDPOINT_OA_EMAIL;
+
+		default:
+			break;
+		}
+		return null;
+	}
+
+	@Override
+	public String getToken() {
+		return PreferenceHelper.token_read(context);
+	}
+}

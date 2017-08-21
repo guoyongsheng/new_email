@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/height_search"
+    android:paddingLeft="@dimen/email_type_padding_top_bottom"
+    android:paddingRight="@dimen/email_check_edit_margin_left_right"
+    android:paddingTop="@dimen/height_search" >
+
+    <TextView
+        android:id="@+id/leave_write_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/leave_write_mail"
+        android:textSize="@dimen/font_common" />
+
+    <TextView
+        android:id="@+id/sure_leave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/leave_write_mail"
+        android:layout_marginTop="@dimen/item_email_list_margin"
+        android:text="@string/mail_draft_content"
+        android:textColor="@color/color_gray"
+        android:textSize="@dimen/font_small" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sure_leave"
+        android:layout_marginTop="@dimen/email_check_edit_margin_left_right" >
+
+        <TextView
+            android:id="@+id/dialog_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/leave"
+            android:textColor="@color/color_red"
+            android:textSize="@dimen/font_small" />
+
+        <TextView
+            android:id="@+id/dialog_save_draft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/email_type_padding_top_bottom"
+            android:layout_toLeftOf="@id/dialog_leave"
+            android:text="@string/save_draft"
+            android:textColor="@color/color_bule"
+            android:textSize="@dimen/font_small" />
+
+        <TextView
+            android:id="@+id/dialog_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/email_type_padding_top_bottom"
+            android:layout_toLeftOf="@id/dialog_save_draft"
+            android:text="@string/cancle"
+            android:textColor="@color/color_bule"
+            android:textSize="@dimen/font_small" />
+    </RelativeLayout>
+
+</RelativeLayout>

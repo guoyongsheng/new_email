@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/item_email_relative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/item_email_list_margin"
+        android:paddingTop="@dimen/item_email_list_margin" >
+
+        <ImageView
+            android:id="@+id/item_email_list_icon"
+            android:layout_width="@dimen/item_email_list_icon_size"
+            android:layout_height="@dimen/item_email_list_icon_size"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/email_type_padding_top_bottom"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/item_email_list_icon"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/item_email_list_no_read"
+                android:layout_width="@dimen/radius_big"
+                android:layout_height="@dimen/radius_big"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_marginTop="@dimen/email_check_edit_padding"
+                android:background="@drawable/drawable_no_read_background"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/item_email_list_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_toRightOf="@id/item_email_list_no_read"
+                android:singleLine="true"
+                android:textSize="@dimen/font_small" />
+
+            <TextView
+                android:id="@+id/item_email_list_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/item_email_list_user"
+                android:layout_marginRight="@dimen/email_type_padding_top_bottom"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/item_email_list_attachment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/item_email_list_time"
+                android:layout_marginRight="@dimen/email_check_edit_margin"
+                android:layout_toLeftOf="@id/item_email_list_time"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@drawable/item_mail_list_attachment"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/item_email_list_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/item_email_list_user"
+                android:layout_marginLeft="@dimen/item_email_list_margin"
+                android:layout_marginRight="@dimen/height_search"
+                android:layout_marginTop="@dimen/email_check_edit_padding"
+                android:singleLine="true"
+                android:textSize="@dimen/font_small" />
+
+            <ImageView
+                android:id="@+id/item_email_iconn_star"
+                android:layout_width="@dimen/common_icon_bottom_size"
+                android:layout_height="@dimen/common_icon_bottom_size"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/item_email_list_subject"
+                android:layout_marginRight="@dimen/email_type_padding_top_bottom"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_icon_insterall"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/item_email_list_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/item_email_list_subject"
+                android:layout_below="@id/item_email_list_subject"
+                android:layout_marginRight="@dimen/email_type_padding_top_bottom"
+                android:layout_marginTop="@dimen/email_check_edit_padding"
+                android:singleLine="true"
+                android:textColor="@color/color_gray"
+                android:textSize="@dimen/font_small" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

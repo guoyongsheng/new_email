@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/head_height_common"
+        android:background="@color/color_white" >
+
+        <ImageView
+            android:id="@+id/item_email_list_account_icon"
+            android:layout_width="@dimen/common_icon_size"
+            android:layout_height="@dimen/common_icon_size"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/item_email_list_margin"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/image_icon_unread"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/item_email_list_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/item_email_list_margin"
+            android:layout_toRightOf="@id/item_email_list_account_icon"
+            android:textSize="@dimen/font_small" />
+
+        <ImageView
+            android:id="@+id/item_email_list_selected"
+            android:layout_width="@dimen/shadow_width"
+            android:layout_height="@dimen/shadow_width"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/account_selected"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</FrameLayout>

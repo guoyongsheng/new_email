@@ -1,0 +1,121 @@
+/**
+ * 
+ */
+package com.zfsoft.zf_new_email.modules.emailsendorreply;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.view.View;
+import android.widget.TextView;
+import com.zfsoft.zf_new_email.R;
+import com.zfsoft.zf_new_email.base.BaseActivity;
+import com.zfsoft.zf_new_email.entity.Email;
+import com.zfsoft.zf_new_email.util.ActivityUtils;
+import com.zfsoft.zf_new_email.util.SharedPreferencedUtis;
+
+/**
+ * @author wesley
+ * @date: 2016-10-24
+ * @Description: 发送邮件或者回复邮件界面
+ */
+public class EmailSendOrReplyActivity extends BaseActivity {
+
+	private TextView tv_title; // 标题
+	private TextView tv_account; // 登陆账号
+	private EmailSendOrReplyFragment fragment;
+	private int type; // 0:写邮件 1:回复 2:回复全部 3:转发 4:回复带附件 5:转发带附件 6:回复全部带附件
+	private Email email; // 邮件对象
+	private int inbox_type; // 0:收件箱 1:未读邮件 2:草稿箱 3:已发送 4:已删除
+	private int email_type; // 0:oa邮箱
+	private int type_in_oa; // 1:收件箱 2:草稿箱 3:已发送
+
+	@Override
+	public int getLayoutId() {
+		return R.layout.activity_email_send_reply;
+	}
+
+	@Override
+	public void initVariables() {
+		Intent intent = getIntent();
+		if (intent != null) {
+			Bundle bundle = intent.getExtras();
+			if (bundle != null) {
+				type = bundle.getInt("type");
+				email_type = bundle.getInt("email_type");
+				if (type != 0) {
+					email = (Email) bundle.getSerializable("email");
+					inbox_type = bundle.getInt("inbox_type", 0);
+					type_in_oa = bundle.getInt("type_in_oa");
+				}
+			}
+		}
+	}
+
+	@Override
+	public void initViews() {
+		tv_title = (TextView) findViewById(R.id.include_head_title);
+		tv_account = (TextView) findViewById(R.id.include_head_account);
+
+		tv_account.setVisibility(View.VISIBLE);
+		tv_account.setText(SharedPreferencedUtis.getMailInfo(this).getUserName());
+
+		FragmentManager manager = getSupportFragmentManager();
+		fragment = (EmailSendOrReplyFragment) manager.findFragmentById(R.id.include_content);
+		if (fragment == null) {
+			fragment = EmailSendOrReplyFragment.newInstance(type, email, inbox_type, email_type, type_in_oa);
+			ActivityUtils.addFragmentToActivity(manager, fragment);
+		}
+
+		initTitle();
+	}
+
+	// 初始化标题
+	private void initTitle() {
+		switch (type) {
+		/**
+		 * 写邮件
+		 */
+		case 0:
+			tv_title.setText(R.string.new_email);
+			break;
+
+		/**
+		 * 回复邮件
+		 */
+		case 1:
+		case 4:
+			tv_title.setText(R.string.reply_mail);
+			break;
+
+		/**
+		 * 回复全部邮件
+		 */
+		case 2:
+		case 6:
+			tv_title.setText(R.string.reply_all_mail);
+			break;
+
+		/**
+		 * 转发邮件
+		 */
+		case 3:
+		case 5:
+			tv_title.setText(R.string.forward_mail);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void initPresenter() {
+		new EmailSendOrReplyPresenter(fragment);
+	}
+
+	@Override
+	public void onBackPressed() {
+		fragment.onBackPressed();
+	}
+}
